@@ -76,10 +76,10 @@
   							<summary>Response</summary>
   							<div id="response" class="tabset">
   								<!-- Tab Headers -->
-  								<input type="radio" name="tabset" id="tab-response-header" aria-controls="responseHeader" checked>
+  								<input type="radio" name="tabset" id="tab-response-header" aria-controls="responseHeader" disabled>
   								<label for="tab-response-header">Headers</label>
   								<!-- Tab Body -->
-  								<input type="radio" name="tabset" id="tab-response-body" aria-controls="responseBody">
+  								<input type="radio" name="tabset" id="tab-response-body" aria-controls="responseBody" disabled>
   								<label for="tab-response-body">Body</label>
   
   								<div class="tab-panels">
@@ -143,7 +143,7 @@
 				env0.selected = 'selected';
 				updateEnv(env0);
 
-				/* Handle for details */
+				// Handle for details
 				const detailsElements = document.querySelectorAll("details");
 
 				detailsElements.forEach(function (item) {
