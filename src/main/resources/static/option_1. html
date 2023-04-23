@@ -39,16 +39,17 @@
         			</div>
         		</div>
         		<div id="contentBody">
+        			<form id="requestForm" action="return send(this)">
         			<div id="hostView" style="display: flex;">
         				<input value="GET" type="text" id="method" style="width: 3.5em;" disabled /><span style="margin-top: .4em; margin-right: .1em">:</span>
         				<select name="host" id="host" onchange="updateHost(this)" style="border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0; background-color: #ffffff;">
         					<option title="Method: GET" value="0">VOID</option>
         				</select>
         				<button class="info" type="button" style="padding-left: 2px; background-color: #ffffff;"><img id="info" title="Information" src="images/info-icon.png" height="20px" /></button>
-        				<button type="button" class="button">Send</button>
+        				<button form="requestForm" type="button" class="button">Send</button>
         			</div>
         			<div>
-						<details>
+						<details id="requestDetails">
   							<summary>Request</summary>
   							<div id="request" class="tabset">
   								<!-- Tab Headers -->
@@ -71,15 +72,12 @@
   								</div>
 							</div>
 						</details>
-						<details>
+						<details id="responseDetails">
   							<summary>Response</summary>
   							<div id="response" class="tabset">
   								<!-- Tab Headers -->
   								<input type="radio" name="tabset" id="tab-response-header" aria-controls="responseHeader" checked>
   								<label for="tab-response-header">Headers</label>
-  								<!-- Tab Parameters -->
-  								<input type="radio" name="tabset" id="tab-response-params" aria-controls="responseParams">
-  								<label for="tab-response-params">Parameters</label>
   								<!-- Tab Body -->
   								<input type="radio" name="tabset" id="tab-response-body" aria-controls="responseBody">
   								<label for="tab-response-body">Body</label>
@@ -87,14 +85,13 @@
   								<div class="tab-panels">
   									<section id="responseHeader" class="tab-panel">
   									</section>
-  									<section id="responseParams" class="tab-panel">
-  									</section>
   									<section id="responseBody" class="tab-panel">
   									</section>
   								</div>
 							</div>
 						</details>
            			</div>
+           			</form>
            		</div>
         	</div>
     	</div>
@@ -113,7 +110,7 @@
 					+ '"env": "PROD", "route": "bocaditos.co.uk"'
 				+ '}]');
 			const funcs = JSON.parse('[{' 
-					+ '"func": "customers", "method": "GET",    "info": "Gets the customer.",    "headers": [{"name": "Content-Type", "value": "application/json", "readOnly": true}, {"name": "Accept", "value": "application/json", "readOnly": true}, {"name": "Authorization", "required": true, "info": "Bearer Java Web Token (JWT)"}, {"name": "User"}], "params": [], "body": []' 
+					+ '"func": "customers", "method": "GET",    "info": "Gets the customer.",    "headers": [{"name": "Content-Type", "value": "application/json", "disabled": true}, {"name": "Accept", "value": "application/json", "disabled": true}, {"name": "Authorization", "required": true, "info": "Bearer Java Web Token (JWT)"}, {"name": "User", "pattern": "^[a-zA-Z\d]{1,20}$"}], "params": [], "body": []' 
 				+ '}, {'
 					+ '"func": "customers", "method": "POST",   "info": "Creates the customer.", "headers": [], "params": [], "body": []'
 				+ '}, {'
@@ -145,9 +142,13 @@
 
 				env0.selected = 'selected';
 				updateEnv(env0);
-				buildRequestHeader();
-				buildRequestParams();
-				buildRequestBody();
+
+				/* Handle for details */
+				const detailsElements = document.querySelectorAll("details");
+
+				detailsElements.forEach(function (item) {
+					item.addEventListener("click", handleClickOnDetails);
+				});
 			}
 
 			function updateEnv(env) {
@@ -163,9 +164,10 @@
 					const route = envs[current.env].route;
 
 					current.func = 0;
-					while (hosts.length > 0) {
-						hosts.remove(0);
+					while (hosts.firstChild) {
+						hosts.removeChild(hosts.lastChild);
 					}
+
 					for (var i = 0; i < funcs.length; i++) {
 						var opt = document.createElement('option');
 						var func = funcs[i];
@@ -176,6 +178,7 @@
 					    hosts.appendChild(opt);
 					}
 					hosts.options[0].selected = 'selected';
+					current.func = -1;
 					updateHost(host);
 
 					console.log("Environment updated by event with index " + index);
@@ -184,63 +187,71 @@
 
 			function updateHost(el) {
 				const index = el.value;
-
+	
+				console.log("Index: " + index + ", current index: " + current.func);
 				if (index != current.func) {
 					console.log("Updating host by event with index " + index + "...");
 
 					const method = document.getElementById('method');
 
 					current.func = index;
-//					host.value = envs[current.env].route + "/" + funcs[current.func];
 					method.value = funcs[index].method;
 					document.getElementById('info').title=funcs[index].info;
 
 					buildRequestHeader();
+					buildRequestParams();
+					buildRequestBody();
 
 					console.log("Host updated by event with index " + index);
 				}
 			}
 
 			function buildRequestHeader() {
-				buildRequest("requestHeader", "tab-request-header", funcs[current.func].headers);
+				buildRequestTab("header", funcs[current.func].headers);
 			}
 
 			function buildRequestParams() {
-				buildRequest("requestParams", "tab-request-params", funcs[current.func].params);
+				buildRequestTab("params", funcs[current.func].params);
 			}
 
 			function buildRequestBody() {
-				buildRequest("requestBody", "tab-request-body", funcs[current.func].body);
+				buildRequestTab("body", funcs[current.func].body);
 			}
 
-			function buildRequest(name, tabName, viewDatas) {
-				const section = document.getElementById(name);
+			function buildRequestTab(name, viewDatas) {
+				const viewName = "request" + name.charAt(0).toUpperCase() + name.substring(1);
+				const tabName = "tab-request-" + name;
+				const section = document.getElementById(viewName);
 
-				if (section.length > 0) {
-					console.log("Cleaning " + name + " request view...");
-					while (section.length > 0) {
-						section.remove(0);
+				if (section.firstChild) {
+					console.log("Cleaning " + viewName + " request tab view...");
+					while (section.firstChild) {
+						section.removeChild(section.lastChild);
 					}
-					console.log(name + " request view was cleaned");
+					console.log(viewName + " request tab view was cleaned");
 				}
 
-				if (viewDatas.length == 0) {
-					var input = document.getElementById(tabName);
+				var input = document.getElementById(tabName);
+
+				if (viewDatas.length == 0 && !input.disabled) {
 
 					input.disabled = true;
+					console.log(viewName + " request tab view is disabled");
 
 					return;
+				} else {
+					input.disabled = false;
 				}
 
-				console.log("Building " + name + " request view...");
+				console.log("Building " + viewName + " request tab view...");
 				for (var i = 0; i < viewDatas.length; i++) {
-					section.appendChild(buildInput(viewDatas[i], i));
+					section.appendChild(buildInput(name, viewDatas[i], i));
 				}
-				console.log(name + " request view was built");
+				console.log(viewName + " request tab view was built");
 			}
 
 
-			function buildInput(viewData, index) {
+			function buildInput(name, viewData, index) {
 				console.log("ViewData: {name: " + viewData.name + ", value: " + viewData.value 
 						+ ", placeholder: " + viewData.placeholder 
 						+ ", required: " + viewData.required
@@ -260,7 +271,7 @@
 				var input = document.createElement('input');
 
 				input.type = 'text';
-				input.id = "header" + index
+				input.id = name + index;
 				if (typeof viewData.value != 'undefined') {
 					input.value = viewData.value;
 					console.log("Value was set for " + viewData.name);
@@ -276,6 +287,10 @@
 				if (typeof viewData.readOnly != 'undefined' && viewData.readOnly) {
 					input.readOnly = viewData.readOnly;
 					console.log("ReadOnly was set for " + viewData.name);
+				}
+				if (typeof viewData.disabled != 'undefined' && viewData.disabled) {
+					input.disabled = viewData.disabled;
+					console.log("Disabled was set for " + viewData.name);
 				}
 				if (typeof viewData.pattern != 'undefined') {
 					input.pattern = viewData.pattern;
@@ -299,6 +314,140 @@
 				}
 
 				return div;
+			}
+
+			function send(form) {
+				consol.log("Building request...");
+				consol.log("Request built");
+
+				consol.log("Sending request...");
+				consol.log("Request sent");
+				
+				const userAction = async () => {
+  						const response = await fetch(buildUrl(), {
+    					method: funcs[current.func].method,
+    					body: buildBody(), // string or object
+    					headers: buildHeaders()
+  					});
+
+				  	// Open response tab
+				  	// Populate headers tab
+//var req = new XMLHttpRequest();
+//req.open('GET', document.location, false);
+//req.send(null);
+//var headers = req.getAllResponseHeaders().toLowerCase();
+					
+				  	// Populate body tab
+				  	const body = await response.json(); // extract JSON from the http response
+				  	const bodyView = document.getElementById("responseBody");
+
+					// Empty view
+					while (bodyView.firstChild) {
+						bodyView.removeChild(bodyView.lastChild);
+					}
+
+					// Set view
+					const tab = document.getElementById("tab-response-body");
+
+					if (typeof body != 'undefined') {
+				  		const textArea = document.createElement('textarea');
+
+						textArea.value = JSON.stringify(JSON.parse(body), undefined, 4);
+						bodyView.addChild(textArea);
+
+						tab.disabled = false;
+					} else {
+						// Disable tab
+						tab.disabled = true;
+					}
+				}
+			}
+
+			function buildUrl() {
+				var func = funcs[current.func];
+				var params = func.params;
+				var queryParams = "";
+
+				if (params.length > 0) {
+					func += "?";
+					for (var i = 0; i < params.length; i++) {
+						const param = params[i];
+
+						if (i > 0) {
+							func += "&";
+						}
+						
+						if (typeof param.value != 'undefined') {
+							func += param.name + "=" + param.value;
+						} else {
+							func += param.name + "=" + getInput("param", i);
+						}
+					}
+				}
+
+				return hots + "/" + func.func + queryParams;
+			}
+
+			function buildHeaders() {
+				return buildObj("header", funcs[current.func].headers);
+			}
+
+			function buildBody() {
+				return buildObj("body", funcs[current.func].body);
+			}
+
+			function buildObj(name, viewdata) {
+				if (viewdata.length == 0) {
+					return;
+				}
+
+				const obj = new Object();
+
+				for (var i = 0; i < viewdata.length; i++) {
+					const data = viewdata[i];
+
+					if (typeof data.value != 'undefined') {
+						obj[data.name] = header.value;
+					} else {
+						// Get it from the form
+						obj[data.name] = getInput(name, i);
+					}
+				}
+
+				return obj;
+			}
+
+			function getInput(name, index) {
+				return document.getElementById(name + index).value;
+			}
+
+			function handleClickOnDetails() {
+  				// Close all details
+  				let detailsOpened = document.querySelectorAll("details[open]");
+
+  				for (const item of detailsOpened) {
+   					// Keep open only details clicked
+    				if (this != item) {
+      					item.removeAttribute("open");
+   				 	}
+  				}
+
+				// Open first tab
+				const name = this.id.substring(0, this.id.length - "Details".length);
+				const inputs = document.getElementById(name).getElementsByTagName('input');
+
+				console.log("No. inputs: " + inputs.length + ", id: " + this.id + ", name: " + name);
+				for (var i = 0; i < inputs.length; ++i) {
+					const input = inputs[i];
+
+console.log("Input id: " + input.id + ", disabled: " + input.disabled);
+					if (input.disabled == false) {
+						input.checked = true;
+						console.log("Found first tab with content and set to checked");
+
+						break;
+					}
+				}
 			}
 		</script>
 	</body>

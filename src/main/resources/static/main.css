@@ -237,7 +237,6 @@ body {
 	cursor: default;
 }
 
-
 .tabset > input:disabled + label {
 	color: #ccc;
 	cursor: default;
