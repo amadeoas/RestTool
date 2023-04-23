@@ -46,7 +46,7 @@
         					<option title="Method: GET" value="0">VOID</option>
         				</select>
         				<button class="info" type="button" style="padding-left: 2px; background-color: #ffffff;"><img id="info" title="Information" src="images/info-icon.png" height="20px" /></button>
-        				<button form="requestForm" type="button" class="button">Send</button>
+        				<button form="requestForm" type="button" class="button" onclick="send(this)">Send</button>
         			</div>
         			<div>
 						<details id="requestDetails">
@@ -317,12 +317,6 @@
 			}
 
 			function send(form) {
-				consol.log("Building request...");
-				consol.log("Request built");
-
-				consol.log("Sending request...");
-				consol.log("Request sent");
-				
 				const userAction = async () => {
   						const response = await fetch(buildUrl(), {
     					method: funcs[current.func].method,
@@ -366,34 +360,43 @@
 			function buildUrl() {
 				var func = funcs[current.func];
 				var params = func.params;
-				var queryParams = "";
+				var url = envs[current.env] + "/" + func.func;
 
 				if (params.length > 0) {
-					func += "?";
+					url += "?";
 					for (var i = 0; i < params.length; i++) {
 						const param = params[i];
 
 						if (i > 0) {
-							func += "&";
+							url += "&";
 						}
 						
 						if (typeof param.value != 'undefined') {
-							func += param.name + "=" + param.value;
+							url += param.name + "=" + param.value;
 						} else {
-							func += param.name + "=" + getInput("param", i);
+							url += param.name + "=" + getInput("param", i);
 						}
 					}
 				}
+				console.log("URL: " + url);
 
-				return hots + "/" + func.func + queryParams;
+				return url;
 			}
 
 			function buildHeaders() {
-				return buildObj("header", funcs[current.func].headers);
+				const hs = buildObj("header", funcs[current.func].headers);
+
+				console.log("Header: " + hs);
+
+				return hs;
 			}
 
 			function buildBody() {
-				return buildObj("body", funcs[current.func].body);
+				const body = buildObj("body", funcs[current.func].body);
+				
+				console.log("Body: " + body);
+
+				return body;
 			}
 
 			function buildObj(name, viewdata) {
