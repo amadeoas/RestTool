@@ -243,7 +243,7 @@ body {
 }
 
 .tab-panel {
-	padding: 30px 0;
+	padding: 4px 0;
 	border-top: 1px solid #ccc;
 }
 
@@ -269,7 +269,10 @@ body {
 	margin-right: 4px;
 }
 
-.header-field > input {
+.header-field > input:invalid {
+	box-shadow: 1px 1px 1px red;
+}
+.header-field > input:valid {
 	border-right: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 }
@@ -288,3 +291,4 @@ textarea:read-write {
   box-shadow: inset 1px 1px 3px #ccc;
   border-radius: 5px;
 }
+
