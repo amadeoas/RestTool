@@ -46,7 +46,7 @@
         					<option title="Method: GET" value="0">VOID</option>
         				</select>
         				<button class="info" type="button" style="padding-left: 2px; background-color: #ffffff;"><img id="info" title="Information" src="images/info-icon.png" height="20px" /></button>
-        				<button form="requestForm" type="button" class="button" onclick="send(this)">Send</button>
+        				<button id="send" form="requestForm" type="button" class="button" onclick="send(this)">Send</button>
         			</div>
         			<div>
 						<details id="requestDetails">
@@ -54,20 +54,20 @@
   							<div id="request" class="tabset">
   								<!-- Tab Headers -->
   								<input type="radio" name="tabset" id="tab-request-header" aria-controls="requestHeader" onclick="checkTab(this)" checked>
-  								<label id="requestHeaderLbl" for="tab-request-header">Headers</label>
+  								<label id="lbl-request-header" for="tab-request-header">Headers</label>
   								<!-- Tab Parameters -->
   								<input type="radio" name="tabset" id="tab-request-params" aria-controls="requestParams" onclick="checkTab(this)">
-  								<label id="requestParamsLbl" for="tab-request-params">Parameters</label>
+  								<label id="lbl-request-params" for="tab-request-params">Parameters</label>
   								<!-- Tab Body -->
   								<input type="radio" name="tabset" id="tab-request-body" aria-controls="requestBody" onclick="checkTab(this)">
-  								<label id="requestBodyLbl" for="tab-request-body">Body</label>
+  								<label id="lbl-request-body" for="tab-request-body">Body</label>
   
   								<div class="tab-panels">
-  									<section id="requestHeader" class="tab-panel">
+  									<section id="sec-request-header" class="tab-panel">
   									</section>
-  									<section id="requestParams" class="tab-panel">
+  									<section id="sec-request-params" class="tab-panel">
   									</section>
-  									<section id="requestBody" class="tab-panel">
+  									<section id="sec-request-body" class="tab-panel">
   									</section>
   								</div>
 							</div>
@@ -77,10 +77,10 @@
   							<div id="response" class="tabset">
   								<!-- Tab Headers -->
   								<input type="radio" name="tabset" id="tab-response-header" aria-controls="responseHeader" disabled>
-  								<label id="responseHeaderLbl" for="tab-response-header">Headers</label>
+  								<label id="lbl-response-header" for="tab-response-header">Headers</label>
   								<!-- Tab Body -->
   								<input type="radio" name="tabset" id="tab-response-body" aria-controls="responseBody" disabled>
-  								<label id="responseBodyLbl" for="tab-response-body">Body</label>
+  								<label id="lbl-response-body" for="tab-response-body">Body</label>
   
   								<div class="tab-panels">
   									<section id="responseHeader" class="tab-panel">
@@ -240,16 +240,16 @@
 			}
 
 			function buildRequestTab(name, viewDatas) {
-				const viewName = "request" + name.charAt(0).toUpperCase() + name.substring(1);
+				const secName = "sec-request-" + name;
 				const tabName = "tab-request-" + name;
-				const section = document.getElementById(viewName);
+				const section = document.getElementById(secName);
 
 				if (section.firstChild) {
-					console.log("Cleaning " + viewName + " request tab view...");
+					console.log("Cleaning " + secName + " request tab view...");
 					while (section.firstChild) {
 						section.removeChild(section.lastChild);
 					}
-					console.log(viewName + " request tab view was cleaned");
+					console.log(secName + " request tab view was cleaned");
 				}
 
 				var input = document.getElementById(tabName);
@@ -257,22 +257,52 @@
 				if (viewDatas.length == 0 && !input.disabled) {
 
 					input.disabled = true;
-					console.log(viewName + " request tab view is disabled");
+					console.log(secName + " request tab view is disabled");
 
 					return;
 				} else {
 					input.disabled = false;
 				}
 
-				console.log("Building " + viewName + " request tab view...");
+				console.log("Building " + secName + " request tab view...");
 				for (var i = 0; i < viewDatas.length; i++) {
-					section.appendChild(buildInput(viewName, viewDatas[i], i));
+					section.appendChild(buildInput(secName, viewDatas[i], i));
 				}
-				console.log(viewName + " request tab view was built");
+				console.log(secName + " request tab view was built");
+
+				validTab(secName);
 			}
 
+			function validTab(secName) {
+				let index = 0;
+				let input;
 
-			function buildInput(name, viewData, index) {
+				while (typeof (input = document.getElementById(secName + "-" + index)) != 'undefined' && input != null) {
+					if (!input.checkValidity()) {
+						// Set header as invalid, i.e. incomplete or error
+						let offset = secName.indexOf("-");
+						const lblName = "lbl" + secName.substring(offset);
+						const lbl = document.getElementById(lblName);
+						const button = document.getElementById("send");
+
+						lbl.className = "invalid";
+						button.disabled = true;
+
+						return false;
+					}
+					index++;
+				}
+
+				let offset = secName.indexOf("-");
+				const lblName = "lbl" + secName.substring(offset);
+				const lbl = document.getElementById(lblName);
+
+				lbl.className = "";
+
+				return true;
+			}
+
+			function buildInput(secName, viewData, index) {
 				console.log("ViewData: {name: " + viewData.name + ", value: " + viewData.value 
 						+ ", placeholder: " + viewData.placeholder 
 						+ ", required: " + viewData.required
@@ -292,7 +322,7 @@
 				var input = document.createElement('input');
 
 				input.type = 'text';
-				input.id = name + "-" + index;
+				input.id = secName + "-" + index;
 				if (typeof viewData.value != 'undefined') {
 					input.value = viewData.value;
 					console.log("Value was set for " + viewData.name);
@@ -555,7 +585,7 @@ console.log("Input id: " + input.id + ", disabled: " + input.disabled);
 console.log("Item: " + item.id);
   				for (const child of children) {
   					if (child.nodeName == "INPUT") {
-console.log("Item: '" + child.id + "', " + child == item);
+console.log("Tab: '" + child.id + "', " + (child == item ? "open" : "closed"));
 						child.checked = child == item;
   					}
   				}
@@ -563,13 +593,10 @@ console.log("Item: '" + child.id + "', " + child == item);
 
 			function setCustomValidity(e) {
 				const input = e.currentTarget;
-				const offset = input.id.indexOf("-");
-				const lblId = input.id.substring(0, offset) + "Lbl";
-				const tabLbl = document.getElementById(lblId);
+				const offset = input.id.lastIndexOf("-");
+				const secName = input.id.substring(0, offset);
 
-console.log("Header\nInput ID: " + input.id + "\nLabel ID: " + tabLbl.id);
-				if (input) {
-				}
+				validTab(secName);
 			}
 		</script>
 	</body>
