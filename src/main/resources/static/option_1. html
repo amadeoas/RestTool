@@ -214,29 +214,39 @@
 					console.log("Updating host by event with index " + index + "...");
 
 					const method = document.getElementById('method');
+					let numValidTabs = 0;
 
 					current.func = index;
 					method.value = funcs[index].method;
 					document.getElementById('info').title=funcs[index].info;
 
-					buildRequestHeader();
-					buildRequestParams();
-					buildRequestBody();
-
+					if (buildRequestHeader()) {
+						numValidTabs++;
+					}
+					if (buildRequestParams()) {
+						numValidTabs++;
+					}
+					if (buildRequestBody()) {
+						numValidTabs++;
+					}
+					if (numValidTabs == 3) {
+						// Activate sent button
+						document.getElementById("send").disabled = false;
+					}
 					console.log("Host updated by event with index " + index);
 				}
 			}
 
 			function buildRequestHeader() {
-				buildRequestTab("header", funcs[current.func].headers);
+				return buildRequestTab("header", funcs[current.func].headers);
 			}
 
 			function buildRequestParams() {
-				buildRequestTab("params", funcs[current.func].params);
+				return buildRequestTab("params", funcs[current.func].params);
 			}
 
 			function buildRequestBody() {
-				buildRequestTab("body", funcs[current.func].body);
+				return buildRequestTab("body", funcs[current.func].body);
 			}
 
 			function buildRequestTab(name, viewDatas) {
@@ -270,10 +280,10 @@
 				}
 				console.log(secName + " request tab view was built");
 
-				validTab(secName);
+				return validTab(secName, false);
 			}
 
-			function validTab(secName) {
+			function validTab(secName, checkAll) {
 				let index = 0;
 				let input;
 
@@ -283,10 +293,9 @@
 						let offset = secName.indexOf("-");
 						const lblName = "lbl" + secName.substring(offset);
 						const lbl = document.getElementById(lblName);
-						const button = document.getElementById("send");
 
 						lbl.className = "invalid";
-						button.disabled = true;
+						document.getElementById("send").disabled = true;
 
 						return false;
 					}
@@ -298,6 +307,24 @@
 				const lbl = document.getElementById(lblName);
 
 				lbl.className = "";
+				if (checkAll) {
+					const names = ["header", "params", "body"];
+					const baseName = secName.substring(0, secName.indexOf("-", "sec-".length) + 1);
+					let numValidTabs = 1;
+
+					for (var name of names) {
+						const nextSecName = baseName + name;
+
+						if (secName != nextSecName && validTab(nextSecName, false)) {
+							numValidTabs++;
+						}
+					}
+
+					if (numValidTabs == names.length) {
+						// Activate sent button
+						document.getElementById("send").disabled = false;
+					}
+				}
 
 				return true;
 			}
@@ -585,7 +612,6 @@ console.log("Input id: " + input.id + ", disabled: " + input.disabled);
 console.log("Item: " + item.id);
   				for (const child of children) {
   					if (child.nodeName == "INPUT") {
-console.log("Tab: '" + child.id + "', " + (child == item ? "open" : "closed"));
 						child.checked = child == item;
   					}
   				}
@@ -596,7 +622,7 @@ console.log("Tab: '" + child.id + "', " + (child == item ? "open" : "closed"));
 				const offset = input.id.lastIndexOf("-");
 				const secName = input.id.substring(0, offset);
 
-				validTab(secName);
+				validTab(secName, true);
 			}
 		</script>
 	</body>
