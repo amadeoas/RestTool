@@ -47,6 +47,7 @@
         				</select>
         				<button class="info" type="button" style="padding-left: 2px; background-color: #ffffff;"><img id="info" title="Information" src="images/info-icon.png" height="20px" /></button>
         				<button id="send" form="requestForm" type="button" class="button" onclick="send(this)">Send</button>
+        				<button id="clear" form="requestForm" type="button" class="button" onclick="clearForm(this)">Clear</button>
         			</div>
         			<div>
 						<details id="requestDetails">
@@ -97,6 +98,7 @@
     	</div>
 
 		<script>
+			const baseTabNames = ["header", "params", "body"];
 			const current = JSON.parse('{' 
 					+ '"env": -1, "func": -1'
 				+ '}');
@@ -308,11 +310,10 @@
 
 				lbl.className = "";
 				if (checkAll) {
-					const names = ["header", "params", "body"];
 					const baseName = secName.substring(0, secName.indexOf("-", "sec-".length) + 1);
 					let numValidTabs = 1;
 
-					for (var name of names) {
+					for (var name of baseTabNames) {
 						const nextSecName = baseName + name;
 
 						if (secName != nextSecName && validTab(nextSecName, false)) {
@@ -320,7 +321,7 @@
 						}
 					}
 
-					if (numValidTabs == names.length) {
+					if (numValidTabs == baseTabNames.length) {
 						// Activate sent button
 						document.getElementById("send").disabled = false;
 					}
@@ -623,6 +624,25 @@ console.log("Item: " + item.id);
 				const secName = input.id.substring(0, offset);
 
 				validTab(secName, true);
+			}
+
+			function clearForm(e) {
+				for (var name of baseTabNames) {
+					const secName = "sec-request-" + name;
+					let index = 0;
+
+					while (typeof (input = document.getElementById(secName + "-" + index)) != 'undefined' 
+							&& input != null) {
+						if (!input.disabled) {
+							input.value = "";
+							if (input.required) {
+								document.getElementById("lbl" + secName.substring("sec".length)).className = "invalid";
+								document.getElementById("send").disabled = true;
+							}
+						}
+						index++;
+					}
+				}
 			}
 		</script>
 	</body>
