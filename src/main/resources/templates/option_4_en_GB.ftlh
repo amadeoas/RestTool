@@ -139,15 +139,15 @@
 
 
 			function init() {
-				var index = 0;
+				var index = 3;
 				const menu = document.getElementById("menuItems");
 
 				menu.appendChild(createMenuItem("Home", "main"));
 				for (var i = 0; i < apiNames.length; i++) {
-					menu.appendChild(createMenuItem(apiNames[i], "option_" + (i+1), i == index));
+					menu.appendChild(createMenuItem(apiNames[i], "option" + (i+1), i == index));
             	}
             	menu.appendChild(document.createElement('hr'));
-				menu.appendChild(createMenuItem("Login", "login"));
+				menu.appendChild(createMenuItem("Login", "login", i == apiNames.length));
 				
 				document.title = "Test UI Tool - " + apiNames[index];
 

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Test UI Tool - </title>
+		<title>Test UI Tool</title>
 		<link rel="stylesheet" href="main.css">
 	</head>
 	<body onload="init()">
@@ -142,12 +142,12 @@
 				var index = 0;
 				const menu = document.getElementById("menuItems");
 
-				menu.appendChild(createMenuItem("Home", "main"));
+				menu.appendChild(createMenuItem("Home", "home"));
 				for (var i = 0; i < apiNames.length; i++) {
-					menu.appendChild(createMenuItem(apiNames[i], "option_" + (i+1), i == index));
+					menu.appendChild(createMenuItem(apiNames[i], "option" + (i+1), i == index));
             	}
             	menu.appendChild(document.createElement('hr'));
-				menu.appendChild(createMenuItem("Login", "login"));
+				menu.appendChild(createMenuItem("Login", "login", i == apiNames.length));
 				
 				document.title = "Test UI Tool - " + apiNames[index];
 

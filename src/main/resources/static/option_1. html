@@ -94,6 +94,7 @@
 			const baseTabNames = ["header", "params", "body"];
 			const current = JSON.parse('{' 
 					+ '"envIndex": 0, "funcIndex": 0, '
+					+ '"info": "This option is the first example of what may be achieved.",'
 					+ '"envs": [{' 
 						+ '"env": "Local", "route": "localhost:8080"'
 					+ '}, {'

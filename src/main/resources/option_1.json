@@ -1,6 +1,6 @@
 {
 	"name": "Option I",
-	"info": "Furst exmaple of implementation",
+	"info": "This option is the first example of what may be achieved.",
 	"envs": [{
 		"env": "Local", 
 		"route": "localhost:8080"
