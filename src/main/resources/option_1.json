@@ -1,0 +1,72 @@
+{
+	"name": "Option I",
+	"info": "Furst exmaple of implementation",
+	"envs": [{
+		"env": "Local", 
+		"route": "localhost:8080"
+	}, {
+		"env": "SIT", 
+		"route": "sit.bocaditos.co.uk"
+	}, {
+		"env": "OAT", 
+		"route": "oat-bocaditos.co.uk"
+	}, {
+		"env": "PROD", 
+		"route": "bocaditos.co.uk"
+	}],
+	"funcs": [{
+		"query": "customers",
+		"method": "GET", 
+		"info": "Gets the customer.", 
+		"headers": [{
+			"name": "Content-Type", 
+			"type": "TEXT", 
+			"value": "application/json", 
+			"disabled": true
+		}, {
+			"name": "Accept", 
+			"type": "TEXT", 
+			"value": "application/json", 
+			"disabled": true
+		}, {
+			"name": "Authorization", 
+			"type": "TEXT", 
+			"required": true, 
+			"info": "Bearer Java Web Token (JWT). It's required."
+		}, {
+			"name": "User", 
+			"type": "TEXT", 
+			"pattern": "^[a-zA-Z\\d]{1,20}$", 
+			"minLength": 1, 
+			"maxLength": 20, 
+			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
+		}], 
+		"body": [{
+			"name": "Firstname", 
+			"type": "TEXT", 
+			"required": true, 
+			"pattern": "^[a-zA-Z ]{1,20}$", 
+			"minLength": 1, 
+			"maxLength": 20, 
+			"info": "Customer's firstname, which it's required. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'.", 
+			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
+		}, {
+			"name": "Surname", 
+			"type": "TEXT", 
+			"required": true, 
+			"pattern": "^[a-zA-Z ]{1,20}$", 
+			"minLength": 1, 
+			"maxLength": 20, 
+			"info": "Customer's surname, which it's required. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'.", 
+			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
+		}, {
+			"name": "Date of birth", 
+			"type": "DATE", 
+			"required": true, 
+			"info": "Custmer's date of birth, which it's required.", 
+			"error": "Invalid date of birth values."
+		}], 
+		"params": [
+		]
+	}]
+}
