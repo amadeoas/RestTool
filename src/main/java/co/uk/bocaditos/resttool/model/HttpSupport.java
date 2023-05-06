@@ -21,6 +21,16 @@ public class HttpSupport {
 	private String info;
 
 	/**
+	 * The environment index to be display as default;
+	 */
+	private int envIndex;
+
+	/**
+	 * The function index to be display as default;
+	 */
+	private int funcIndex;
+
+	/**
 	 * Available environments.
 	 */
 	private List<HttpEnvironment> envs;
@@ -61,6 +71,22 @@ public class HttpSupport {
 
 	public void setFuncs(List<HttpFunction> funcs) {
 		this.funcs = funcs;
+	}
+
+	public int getEnvIndex() {
+		return envIndex;
+	}
+
+	public void setEnvIndex(int envIndex) {
+		this.envIndex = envIndex;
+	}
+
+	public int getFuncIndex() {
+		return funcIndex;
+	}
+
+	public void setFuncIndex(int funcIndex) {
+		this.funcIndex = funcIndex;
 	}
 
 } // end class HttpSupport
