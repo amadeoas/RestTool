@@ -3,8 +3,10 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Test UI Tool</title>
+		<title>REST API UI Tool</title>
+		<link rel="shortcut icon" href="#" />
 		<link rel="stylesheet" href="main.css">
+		<script type="text/javascript" src="pages.js"></script>
 	</head>
 	<body onload="init()">
     	<div id="main">
@@ -37,43 +39,16 @@
         	</div>
     	</div>
 
-		<script>
-			const apiDetails = JSON.parse('[{'
-				+ '"name": "Option I", '
-				+ '"info": "This option is the first example of what may be achieved."'
-			+ '}, {'
-				+ '"name": "Option II", '
-				+ '"info": "This option is the second example of what may be achieved."'
-			+ '}, {'
-				+ '"name": "Option III", '
-				+ '"info": "This option is the third example of what may be achieved."'
-			+ '}, {'
-				+ '"name": "Option IV", '
-				+ '"info": "This option is the fouth example of what may be achieved."'
-			+ '}]');
-
+		<script type="text/javascript">
 			function init() {
-				var index = -1;
-				const menu = document.getElementById("menuItems");
 				const cards = document.getElementById("cards");
 
-				menu.appendChild(createMenuItem("Home", "home", true));
+				buildMenu(-1);
 				for (var i = 0; i < apiDetails.length; i++) {
-					menu.appendChild(createMenuItem(apiDetails[i].name, "option" + (i+1), i == index));
 					cards.appendChild(buildCard(i));
  	           	}
-            	menu.appendChild(document.createElement('hr'));
-				menu.appendChild(createMenuItem("Login", "login", i == apiDetails.length));
-				
-				document.title = "Test UI Tool";
-
-				const title = document.getElementById("contentTitle");
-				var p = document.createElement('p');
-				
-				p.innerHTML = "Home";
-				title.appendChild(p);
 			}
-			
+
 			function buildCard(i) {
 				const li = document.createElement('li');
 				const card = document.createElement('div');
@@ -104,25 +79,6 @@
 				li.appendChild(card);
 
 				return li;
-			}
-			
-			function createMenuItem(name, pageHref, disabled = false) {
-				var p = document.createElement('p');
-
-				if (disabled) {
-					// <p class="disabled">Option 1</p>
-					p.innerHTML = name;
-					p.className = "disabled";
-				} else {
-					// <p><a href="home.html">Home</a></p>
-					var a = document.createElement('a');
-
-					a.href = pageHref;
-					a.innerHTML = name;
-					p.appendChild(a);
-				}
-
-				return p;
 			}
 		</script>
 	</body>

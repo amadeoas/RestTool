@@ -55,6 +55,7 @@ button span {
 #menu {
 	height: 100%;
 	width: 12em;
+	min-width: 6em;
 	border-right: 1px solid #000000;
 }
 
