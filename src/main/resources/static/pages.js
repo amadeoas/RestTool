@@ -106,12 +106,13 @@ function buildMenu(index) {
 	const menu = document.getElementById("menuItems");
 
 	apiDetails.index = index;
-	menu.appendChild(createMenuItem("Home", "home", index == -1));
+	removeAllChildren(menu);
+	menu.appendChild(createMenuItem("Home", "home", -1));
 	for (var i = 0; i < apiDetails.details.length; i++) {
-		menu.appendChild(createMenuItem(apiDetails.details[i].name, "option" + (i+1), i == index));
+		menu.appendChild(createMenuItem(apiDetails.details[i].name, "option" + (i+1), i));
 	}
 	menu.appendChild(document.createElement('hr'));
-	menu.appendChild(createMenuItem("Login", "login", apiDetails.details.length == index));
+	menu.appendChild(createMenuItem("Login", "login", apiDetails.details.length));
 
 	document.title = "REST API UI Tool";
 	if (index > apiDetails.details.length) {
@@ -121,8 +122,9 @@ function buildMenu(index) {
 	}
 
 	const title = document.getElementById("contentTitle");
-	var p = document.createElement('p');	
+	const p = document.createElement('p');	
 	
+	removeAllChildren(title);
 	p.innerHTML = index < 0 ? "Home" : ((index > apiDetails.details.length) ? "Login" : apiDetails.details[index].name);
 	title.appendChild(p);
 }
@@ -169,7 +171,7 @@ function updateHost(el) {
 
 		apiDetails.details[apiDetails.index].funcIndex = index;
 		method.value = apiDetails.details[apiDetails.index].funcs[index].method;
-		document.getElementById('info').title=apiDetails.details[apiDetails.index].funcs[index].info;
+		document.getElementById('info').title = apiDetails.details[apiDetails.index].funcs[index].info;
 
 		if (buildRequestHeader()) {
 			numValidTabs++;
@@ -204,17 +206,9 @@ function buildRequestTab(name, viewDatas) {
 	const secName = "sec-request-" + name;
 	const tabName = "tab-request-" + name;
 	const section = document.getElementById(secName);
+	const input = document.getElementById(tabName);
 
-	if (section.firstChild) {
-		console.log("Cleaning " + secName + " request tab view...");
-		while (section.firstChild) {
-			section.removeChild(section.lastChild);
-		}
-		console.log(secName + " request tab view was cleaned");
-	}
-
-	var input = document.getElementById(tabName);
-
+	removeAllChildren(section);
 	if (viewDatas.length == 0 && !input.disabled) {
 
 		input.disabled = true;
@@ -564,10 +558,10 @@ function clearForm(e) {
 				}
 }
 
-function createMenuItem(name, pageHref, disabled = false) {
+function createMenuItem(name, pageHref, index) {
 	var p = document.createElement('p');
 
-	if (disabled) {
+	if (index == apiDetails.index) {
 		// <p class="disabled">Option 1</p>
 		p.innerHTML = name;
 		p.className = "disabled";
@@ -575,7 +569,8 @@ function createMenuItem(name, pageHref, disabled = false) {
 		// <p><a href="home.html">Home</a></p>
 		var a = document.createElement('a');
 
-		a.href = pageHref;
+		a.href = "javascript:init(" + index + ")";
+//		a.onClick = "javascript:init(" + index + ")";
 		a.innerHTML = name;
 		p.appendChild(a);
 	}
