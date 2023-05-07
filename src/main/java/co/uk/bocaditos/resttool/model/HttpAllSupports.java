@@ -24,7 +24,6 @@ public class HttpAllSupports {
 
 	private final String version; // the version of the data
 	private final List<HttpSupport> supports;
-	private final List<String> apiNames;
 
 
 	public HttpAllSupports(final ObjectMapper mapper) throws IOException {
@@ -35,10 +34,8 @@ public class HttpAllSupports {
 
 		this.version = "0.0";
 		this.supports = new ArrayList<>();
-		this.apiNames = new ArrayList<>();
 		while ((support = loadJson(mapper, "option_" + ++i + ".json")) != null) {
 			this.supports.add(support);
-			this.apiNames.add(support.getName());
 			logger.debug("Loaded API {} definitions at index {}", support.getName(), i - 1);
 		}
 		logger.info("Loaded {} supported APIs", this.supports.size());
@@ -51,18 +48,10 @@ public class HttpAllSupports {
 	public List<HttpSupport> getSupports() {
 		return this.supports;
 	}
-    
-    public List<String> getApiNames() {
-    	return this.apiNames;
-    }
 	
 	public HttpSupport get(final int index) {
 		return this.supports.get(index);
 	}
-    
-    public String getApiName(final int index) {
-    	return this.apiNames.get(index);
-    }
     
     static HttpSupport loadJson(final ObjectMapper mapper, final String filename) throws IOException {
     	final ClassPathResource rsc = new ClassPathResource(filename);

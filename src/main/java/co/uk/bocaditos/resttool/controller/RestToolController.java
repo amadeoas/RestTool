@@ -40,42 +40,22 @@ public class RestToolController {
 
     @GetMapping(value = "/option1")
     public String option1(final Model model) {
-    	logger.debug("Setting up Option 1 page...");
-    	model.addAttribute("data", this.supported.get(0));
-    	model.addAttribute("names", this.supported.getApiName(0));
-    	logger.debug("Option 1 page was successfully set up");
-
-        return "option_1";
+        return option(model, 0);
     }
 
     @GetMapping(value = "/option2")
     public String option2(final Model model) {
-    	logger.debug("Setting up Option 2 page...");
-    	model.addAttribute("data", this.supported.get(1));
-    	model.addAttribute("names", this.supported.getApiName(1));
-    	logger.debug("Option 2 page was successfully set up");
-
-        return "option_2";
+        return option(model, 1);
     }
 
     @GetMapping("/option3")
     public String option3(final Model model) {
-    	logger.debug("Setting up Option 3 page...");
-    	model.addAttribute("data", this.supported.get(2));
-    	model.addAttribute("names", this.supported.getApiName(2));
-    	logger.debug("Option 3 page was successfully set up");
-
-        return "option_3";
+        return option(model, 2);
     }
 
     @GetMapping("/option4")
     public String option4(final Model model) {
-    	logger.debug("Setting up Option 4 page...");
-    	model.addAttribute("data", this.supported.get(3));
-    	model.addAttribute("names", this.supported.getApiName(3));
-    	logger.debug("Option 4 page was successfully set up");
-
-        return "option_4";
+        return option(model, 3);
     }
 
     @GetMapping("/login")
@@ -89,6 +69,15 @@ public class RestToolController {
     @GetMapping("/licence")
     public String lice(final Model model) {
         return "licence_page";
+    }
+    
+    private String option(final Model model, final int index) {
+    	logger.debug("Setting up {} page...", this.supported.get(index).getName());
+    	model.addAttribute("data", this.supported.get(index));
+    	model.addAttribute("index", index);
+    	logger.debug("{} page was successfully set up", this.supported.get(index).getName());
+
+        return "option";
     }
 
 } // end class RestToolController
