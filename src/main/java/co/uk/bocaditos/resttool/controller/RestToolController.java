@@ -54,11 +54,7 @@ public class RestToolController {
 
 	@GetMapping({"/", "/home"})
     public String home(final Model model) {
-    	logger.debug("Setting up home page...");
-    	model.addAttribute("data", new HttpAllSupportsIndex(this.supported, -1));
-    	logger.debug("Home page was successfully set up");
-
-        return "main";
+        return option(model, -1);
     }
 
     @GetMapping(value = "/option1")
@@ -83,18 +79,23 @@ public class RestToolController {
 
     @GetMapping("/login")
     public String login(final Model model) {
-    	logger.debug("Setting up login page...");
-    	logger.debug("Login page was successfully set up");
-
-    	return "login_page";
+        return option(model, this.supported.getNumApis());
     }
     
     private String option(final Model model, final int index) {
-    	logger.debug("Setting up {} page...", this.supported.get(index).getName());
-    	model.addAttribute("data", new HttpAllSupportsIndex(this.supported, index));
-    	logger.debug("{} page was successfully set up", this.supported.get(index).getName());
+    	logger.debug("Setting up {} page...", getApiName(index));
+
+    	model.addAttribute("data", this.supported.toString());
+    	model.addAttribute("index", index);
+    	logger.debug("{} page was successfully set up", getApiName(index));
 
         return "option";
+    }
+
+    private String getApiName(final int index) {
+    	return (index < 0) 
+    			? "home" : ((index >= this.supported.getNumApis()) 
+    					? "Login" : this.supported.get(index).getName());
     }
 
 } // end class RestToolController

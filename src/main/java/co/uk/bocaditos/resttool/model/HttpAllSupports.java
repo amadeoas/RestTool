@@ -22,8 +22,18 @@ public class HttpAllSupports {
 
 	private static final Logger logger = LogManager.getLogger(HttpAllSupports.class);
 
+	/**
+	 * The version with format: M.m.ppp that corresponds to 'M' major, 'm' minor and 'ppp' patch.
+	 */
 	private final String version; // the version of the data
+	/**
+	 * Supported APIs information.
+	 */
 	private final List<HttpSupport> supports;
+	/**
+	 * JSON representation of the instance of this class.
+	 */
+	private final String json; // JSON form of the full object 
 
 
 	public HttpAllSupports(final ObjectMapper mapper) throws IOException {
@@ -38,7 +48,8 @@ public class HttpAllSupports {
 			this.supports.add(support);
 			logger.debug("Loaded API {} definitions at index {}", support.getName(), i - 1);
 		}
-		logger.info("Loaded {} supported APIs", this.supports.size());
+		this.json = mapper.writeValueAsString(this);
+		logger.info("Loaded {} supported APIs v{}", this.supports.size(), this.version);
 	}
 
 	/**
@@ -49,18 +60,28 @@ public class HttpAllSupports {
 	public HttpAllSupports(final HttpAllSupports supports) {
 		this.version = supports.version;
 		this.supports = supports.supports;
+		this.json = supports.json;
 	}
 	
-	public String getVersion() {
+	public final String getVersion() {
 		return this.version;
 	}
 	
-	public List<HttpSupport> getSupports() {
+	public final List<HttpSupport> getSupports() {
 		return this.supports;
+	}
+	
+	public final int getNumApis() {
+		return this.supports.size();
 	}
 	
 	public HttpSupport get(final int index) {
 		return this.supports.get(index);
+	}
+
+	@Override
+	public final String toString() {
+		return this.json;
 	}
     
     static HttpSupport loadJson(final ObjectMapper mapper, final String filename) throws IOException {

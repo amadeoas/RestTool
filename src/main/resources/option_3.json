@@ -5,13 +5,13 @@
 		"env": "Local", 
 		"route": "localhost:8080"
 	}, {
-		"env": "SIT", 
+		"name": "SIT", 
 		"route": "sit.bocaditos.co.uk"
 	}, {
-		"env": "OAT", 
+		"name": "OAT", 
 		"route": "oat-bocaditos.co.uk"
 	}, {
-		"env": "PROD", 
+		"name": "PROD", 
 		"route": "bocaditos.co.uk"
 	}],
 	"funcs": [{

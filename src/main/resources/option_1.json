@@ -2,16 +2,16 @@
 	"name": "Option I",
 	"info": "This option is the first example of what may be achieved.",
 	"envs": [{
-		"env": "Local", 
+		"name": "Local", 
 		"route": "localhost:8080"
 	}, {
-		"env": "SIT", 
+		"name": "SIT", 
 		"route": "sit.bocaditos.co.uk"
 	}, {
-		"env": "OAT", 
+		"name": "OAT", 
 		"route": "oat-bocaditos.co.uk"
 	}, {
-		"env": "PROD", 
+		"name": "PROD", 
 		"route": "bocaditos.co.uk"
 	}],
 	"funcs": [{
