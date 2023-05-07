@@ -102,6 +102,9 @@
            			<div id="loginView" hidden>
 	           			Right Login
            			</div>
+           			
+					<div id="errorView" hidden>
+					</div>
            		</div>
         	</div>
     	</div>

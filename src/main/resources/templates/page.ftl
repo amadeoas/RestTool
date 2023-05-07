@@ -18,13 +18,20 @@
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
 
 
+		function init(index, err) {
+		apiDetails.error = err; 
+
+		init(index);
+	}
+
 	function init(index) {
 		buildMenu(index);
 
-		if (index < 0) {
+		if (index == -1) {
 			// Home page
 			const cards = document.getElementById("cards");
 
+			hideIt("errorView");
 			hideIt("env");
 			hideIt("optionsView");
 			hideIt("loginView");
@@ -35,8 +42,18 @@
 			}
 
 			return;
+		} else if (index == -2) {
+			hideIt("homeView");
+			hideIt("env");
+			hideIt("optionsView");
+			hideIt("loginView");
+			showIt("errorView");
+			
+
+			return;
 		} else if (apiDetails.index >= apiDetails.supports.length) {
 			// Login page
+			hideIt("errorView");
 			hideIt("homeView");
 			hideIt("env");
 			hideIt("optionsView");
@@ -46,6 +63,7 @@
 		}
 
 		// Build one of the options
+		hideIt("errorView");
 		document.getElementById("homeView").hidden = true;
 		document.getElementById("loginView").hidden = true;
 		showIt("optionsView"); 
@@ -118,9 +136,19 @@
 
 		const title = document.getElementById("contentTitle");
 		const p = document.createElement('p');	
+		var innerHTML;
 
 		removeAllChildren(title);
-		p.innerHTML = index < 0 ? "Home" : ((index >= apiDetails.supports.length) ? "Login" : apiDetails.supports[index].name);
+		if (index == -1) {
+			innerHTML = "Home";
+		} else if (index == apiDetails.supports.length) {
+			innerHTML = "Login";
+		} else if (index == -2) {
+			innerHTML = "Error - " + apiDetails.error;
+		} else {
+			innerHTML = apiDetails.supports[index].name;
+		}
+		p.innerHTML = innerHTML;
 		title.appendChild(p);
 	}
 
@@ -411,22 +439,71 @@
 	function sendForm() {
 		// Action from submitting form
 	console.log("Form: sendForm()");
-		fetch(getHost(), {
+		fetch(getRestHost(), {
 				method: getMethod(), 
-				headers: {}, 
-				body: JSON.stringify({})
+				headers: getRestHeaders(), 
+				body: JSON.stringify(getRestBody())
 			})
 			.then(response => response.json())
 			.then(json => console.log(json))
-			.catch(err => console.log(err));
+			.catch(err => init(-2, err));
 	}
 
 	function getMethod() {
 		return document.getElementById('method').value;
 	}
 
-	function getHost() {
-		return document.getElementById('host').value;
+	function getRestHeaders() {
+		const api = apiDetails.supported[apiDetails.index];
+		const func = api.funcs[api.funcIndex];
+		var headers = new Object();
+		var index = -1;
+		var input;
+
+		while ((input = ("sec-request-header-" + (++index))) != null) {
+			headers[func.headers[index]] = input.value;
+		}
+
+		return headers;
+	}
+
+	function getRestHost() {
+		return document.getElementById('host').value + getRestParams();
+	}
+
+	function getRestParams() {
+		const api = apiDetails.supported[apiDetails.index];
+		const func = api.funcs[api.funcIndex];
+		var params = "";
+		var index = -1;
+		var input;
+
+		while ((input = ("sec-request-header-" + (++index))) != null) {
+			if (params.length > 0) {
+				params += "&";
+			}
+			params += func.params[index] + "=" + encodeURIComponent(input.value);
+		}
+
+		if (params.length > 0) {
+			params = "?" + params;
+		}
+
+		return params;
+	}
+	
+	function getRestBody() {
+		const api = apiDetails.supported[apiDetails.index];
+		const func = api.funcs[api.funcIndex];
+		var body = new Object();
+		var index = -1;
+		var input;
+
+		while ((input = ("sec-request-header-" + (++index))) != null) {
+			body[func.body[index]] = input.value;
+		}
+
+		return body;
 	}
 
 	function buildUrl() {
