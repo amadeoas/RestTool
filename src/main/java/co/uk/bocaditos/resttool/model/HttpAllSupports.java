@@ -27,6 +27,10 @@ public class HttpAllSupports {
 	 */
 	private final String version; // the version of the data
 	/**
+	 * The name of this tool.
+	 */
+	private final String name;
+	/**
 	 * Supported APIs information.
 	 */
 	private final List<HttpSupport> supports;
@@ -36,13 +40,14 @@ public class HttpAllSupports {
 	private final String json; // JSON form of the full object 
 
 
-	public HttpAllSupports(final ObjectMapper mapper) throws IOException {
+	public HttpAllSupports(final String name, final ObjectMapper mapper) throws IOException {
 		logger.info("Loading supported APIs...");
 
 		int i = 0;
 		HttpSupport support;
 
 		this.version = "0.0";
+		this.name = name;
 		this.supports = new ArrayList<>();
 		while ((support = loadJson(mapper, "option_" + ++i + ".json")) != null) {
 			this.supports.add(support);
@@ -59,12 +64,17 @@ public class HttpAllSupports {
 	 */
 	public HttpAllSupports(final HttpAllSupports supports) {
 		this.version = supports.version;
+		this.name = supports.name;
 		this.supports = supports.supports;
 		this.json = supports.json;
 	}
 	
 	public final String getVersion() {
 		return this.version;
+	}
+
+	public final String getName() {
+		return this.name;
 	}
 	
 	public final List<HttpSupport> getSupports() {

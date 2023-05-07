@@ -22,6 +22,7 @@ import co.uk.bocaditos.resttool.model.HttpAllSupports;
 public class RestToolController {
 
 	private static final Logger logger = LogManager.getLogger(RestToolController.class);
+	private static final String NAME = "REST API UI Tool";
 
 	private final HttpAllSupports supported;
 
@@ -49,7 +50,7 @@ public class RestToolController {
 
 
 	public RestToolController(final ObjectMapper mapper) throws IOException {
-		this.supported = new HttpAllSupports(mapper);
+		this.supported = new HttpAllSupports(NAME, mapper);
 	}
 
 	@GetMapping({"/", "/home"})
