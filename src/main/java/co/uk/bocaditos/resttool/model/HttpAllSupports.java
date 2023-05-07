@@ -40,6 +40,16 @@ public class HttpAllSupports {
 		}
 		logger.info("Loaded {} supported APIs", this.supports.size());
 	}
+
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param supported the supports.
+	 */
+	public HttpAllSupports(final HttpAllSupports supports) {
+		this.version = supports.version;
+		this.supports = supports.supports;
+	}
 	
 	public String getVersion() {
 		return this.version;

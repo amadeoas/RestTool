@@ -26,6 +26,28 @@ public class RestToolController {
 	private final HttpAllSupports supported;
 
 
+	/**
+	 * Represent all the supports and selected one.
+	 * 
+	 * @author aasco
+	 */
+	public class HttpAllSupportsIndex extends HttpAllSupports {
+
+		private int index;
+
+
+		public HttpAllSupportsIndex(final HttpAllSupports supported, final int index) {
+			super(supported);
+			this.index = index;
+		}
+		
+		public int getIndex() {
+			return this.index;
+		}
+
+	} // end class HttpAllSupportsIndex()
+
+
 	public RestToolController(final ObjectMapper mapper) throws IOException {
 		this.supported = new HttpAllSupports(mapper);
 	}
@@ -33,6 +55,7 @@ public class RestToolController {
 	@GetMapping({"/", "/home"})
     public String home(final Model model) {
     	logger.debug("Setting up home page...");
+    	model.addAttribute("data", new HttpAllSupportsIndex(this.supported, -1));
     	logger.debug("Home page was successfully set up");
 
         return "main";
@@ -65,16 +88,10 @@ public class RestToolController {
 
     	return "login_page";
     }
-
-    @GetMapping("/licence")
-    public String lice(final Model model) {
-        return "licence_page";
-    }
     
     private String option(final Model model, final int index) {
     	logger.debug("Setting up {} page...", this.supported.get(index).getName());
-    	model.addAttribute("data", this.supported.get(index));
-    	model.addAttribute("index", index);
+    	model.addAttribute("data", new HttpAllSupportsIndex(this.supported, index));
     	logger.debug("{} page was successfully set up", this.supported.get(index).getName());
 
         return "option";

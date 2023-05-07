@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="main.css">
 		<script type="text/javascript" src="pages.js"></script>
 	</head>
-	<body onload="init(${index})">
+	<body onload="init(${data.index})">
     	<div id="main">
         	<div id="menu">
         		<div id="menuHead">
