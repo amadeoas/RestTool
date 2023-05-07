@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="main.css">
 		<script type="text/javascript" src="pages.js"></script>
 	</head>
-	<body onload="init()">
+	<body onload="init(-1)">
     	<div id="main">
         	<div id="menu">
         		<div id="menuHead">
@@ -38,48 +38,5 @@
            		</div>
         	</div>
     	</div>
-
-		<script type="text/javascript">
-			function init() {
-				const cards = document.getElementById("cards");
-
-				buildMenu(-1);
-				for (var i = 0; i < apiDetails.length; i++) {
-					cards.appendChild(buildCard(i));
- 	           	}
-			}
-
-			function buildCard(i) {
-				const li = document.createElement('li');
-				const card = document.createElement('div');
-				var div;
-				var button;
-
-				card.className = "card";
-
-				div = document.createElement('div');
-				div.innerHTML = apiDetails[i].name;
-				div.className = "cardHeader";
-				card.appendChild(div);
-
-				div = document.createElement('div');
-				div.innerHTML = apiDetails[i].info;
-				div.className = "container";
-				card.appendChild(div);
-
-				div = document.createElement('div');
-				div.className = "cardFooter";
-				button = document.createElement('button');
-				button.type = "button";
-				button.innerHTML = apiDetails[i].name;
-				button.onclick = "window.location.href='option1'; return false;";
-				div.appendChild(button);
-				card.appendChild(div);
-
-				li.appendChild(card);
-
-				return li;
-			}
-		</script>
 	</body>
 </html>

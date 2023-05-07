@@ -68,6 +68,17 @@ const apiDetails = JSON.parse('{'
 
 function init(index) {
 	buildMenu(index);
+	if (index < 0) {
+		// Home page	
+		const cards = document.getElementById("cards");
+
+		removeAllChildren(cards);
+		for (var i = 0; i < apiDetails.details.length; i++) {
+			cards.appendChild(buildCard(i));
+		}
+
+		return;
+	}
 	buildEnvs();
 
 	// Handle for details
@@ -99,6 +110,9 @@ function buildEnvs() {
 }
 
 function removeAllChildren(node) {
+	if (node == null) {
+		return;
+	}
 	node.textContent = '';
 }
 
@@ -125,7 +139,7 @@ function buildMenu(index) {
 	const p = document.createElement('p');	
 	
 	removeAllChildren(title);
-	p.innerHTML = index < 0 ? "Home" : ((index > apiDetails.details.length) ? "Login" : apiDetails.details[index].name);
+	p.innerHTML = index < 0 ? "Home" : ((index >= apiDetails.details.length) ? "Login" : apiDetails.details[index].name);
 	title.appendChild(p);
 }
 
@@ -569,11 +583,48 @@ function createMenuItem(name, pageHref, index) {
 		// <p><a href="home.html">Home</a></p>
 		var a = document.createElement('a');
 
-		a.href = "javascript:init(" + index + ")";
-//		a.onClick = "javascript:init(" + index + ")";
+		if (index < 0 || index >= apiDetails.details.length) {
+			a.href = pageHref;
+		} else if (apiDetails.index == -1) {
+			a.href = "option" + (index + 1);
+		} else {
+			a.href = "javascript:init(" + index + ")";
+		}
 		a.innerHTML = name;
 		p.appendChild(a);
 	}
 
 	return p;
+}
+
+function buildCard(i) {
+	const li = document.createElement('li');
+	const card = document.createElement('div');
+	var div;
+	var button;
+
+	card.className = "card";
+
+	div = document.createElement('div');
+	div.innerHTML = apiDetails.details[i].name;
+	div.className = "cardHeader";
+	card.appendChild(div);
+
+	div = document.createElement('div');
+	div.innerHTML = apiDetails.details[i].info;
+	div.className = "container";
+	card.appendChild(div);
+
+	div = document.createElement('div');
+	div.className = "cardFooter";
+	button = document.createElement('button');
+	button.type = "button";
+	button.innerHTML = apiDetails.details[i].name;
+	button.onclick = "window.location.href='option1'; return false;";
+	div.appendChild(button);
+	card.appendChild(div);
+
+	li.appendChild(card);
+
+	return li;
 }

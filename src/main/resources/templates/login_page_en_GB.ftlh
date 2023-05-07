@@ -18,11 +18,11 @@
 	        		</div>
         		</div>
         		<div id="menuItems">
-            		<p><a href="home.html">Home</a></p>
-            		<p><a href="option2.html">Option 1</a></p> 
-            		<p><a href="option2.html">Option 2</a></p> 
-            		<p><a href="option3.html">Option 3</a></p> 
-            		<p><a href="option4.html">Option 4</a></p>
+            		<p><a href="home">Home</a></p>
+            		<p><a href="option1">Option I</a></p> 
+            		<p><a href="option2">Option II</a></p> 
+            		<p><a href="option3">Option III</a></p> 
+            		<p><a href="option4">Option IV</a></p>
             		<hr />
             		<p class="disabled">Login</p>
             	</div>
