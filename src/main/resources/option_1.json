@@ -71,7 +71,7 @@
 	}, {
 		"query": "customers",
 		"method": "POST", 
-		"info": "Creates the customer.", 
+		"info": "Creates a new customer.", 
 		"headers": [{
 			"name": "Content-Type", 
 			"type": "TEXT", 

@@ -143,7 +143,7 @@
 				var func = api.funcs[i];
 
 			    opt.value = i;
-			    opt.title = "Method: " + func.method;
+			    opt.title = func.method + ((func.info == null) ? "" : ", " + func.info);
 			    opt.innerHTML = route + "/" + func.query;
 			    hosts.appendChild(opt);
 			}
