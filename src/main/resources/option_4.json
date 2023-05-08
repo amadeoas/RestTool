@@ -3,16 +3,16 @@
 	"info": "This option is the fouth example of what may be achieved.",
 	"envs": [{
 		"name": "Local", 
-		"route": "localhost:8080"
+		"route": "http://localhost:8080"
 	}, {
 		"name": "SIT", 
-		"route": "sit.bocaditos.co.uk"
+		"route": "http://sit.bocaditos.co.uk"
 	}, {
 		"name": "OAT", 
-		"route": "oat-bocaditos.co.uk"
+		"route": "http://oat-bocaditos.co.uk"
 	}, {
 		"name": "PROD", 
-		"route": "bocaditos.co.uk"
+		"route": "http://bocaditos.co.uk"
 	}],
 	"funcs": [{
 		"query": "customers",

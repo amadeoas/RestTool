@@ -439,35 +439,22 @@
 
 	function sendForm() {
 		// Action from submitting form
-		var v = getRestHosts();
-console.log("Host: " + v);
-v = JSON.stringify(getRestHeaders());
-console.log("Headers: " + v);
-v = JSON.stringify(getRequest());
-console.log("Request: " + v);
-		fetch(getRestHosts(), {
-				method: 'POST', 
-				headers: getRestHeaders(), 
-				body: JSON.stringify(getRequest())
-			})
-			.then(response => response.json())
-			.then(json => console.log('JSON: ' + json))
-			.catch(err => init(-2, err));
+		let xhr = new XMLHttpRequest();
+
+		xhr.onload = function() {
+			if (xhr.status == 200) {
+				console.log("Response: " + JSON.stringify(xhr.response));
+			} else {
+				console.log('error' + xhr.status + ', "' + xhr.statusText + '"');
+			}
+		};
+		xhr.open('POST', '/execute', true);
+		xhr.setRequestHeader('Content-type', 'application/json');
+		xhr.setRequestHeader('Accept', 'application/json');
+		xhr.send(buildRequest());
 	}
 
-	function getRestHosts() {
-		return window.location.host + '/execute';
-	}
-
-	function getRestHeaders() {
-		const headers = new Object();
-		
-		headers["Content-Type"] = "application/json";
-
-		return headers;
-	}
-
-	function getRequest() {
+	function buildRequest() {
 		const request = new Object();
 		const func = apiDetails.supports[apiDetails.index];
 
@@ -478,34 +465,24 @@ console.log("Request: " + v);
 		request.headers = buildHeaders();
 		request.body = buildBody();
 
-		return request;
+		console.log("Request: ", JSON.stringify(request));
+
+		return JSON.stringify(request);
 	}
 
 	function buildParams() {
-		const params = buildObj("param", 
+		return buildObj("param", 
 				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].params);
-
-		console.log("Params: " + JSON.stringify(params));
-
-		return params;
 	}
 
 	function buildHeaders() {
-		const hs = buildObj("header", 
+		return buildObj("header", 
 				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].headers);
-
-		console.log("Header: " + JSON.stringify(hs));
-
-		return hs;
 	}
 
 	function buildBody() {
-		const body = buildObj("body", 
+		return buildObj("body", 
 				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].body);
-
-		console.log("Body: " + JSON.stringify(body));
-
-		return body;
 	}
 
 	function buildObj(name, viewdata) {

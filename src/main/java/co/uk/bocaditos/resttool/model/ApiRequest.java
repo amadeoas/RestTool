@@ -22,7 +22,7 @@ public class ApiRequest {
 		return apiIndex;
 	}
 
-	public void setApiIndex(int apiIndex) {
+	public void setApiIndex(final int apiIndex) {
 		this.apiIndex = apiIndex;
 	}
 
@@ -30,7 +30,7 @@ public class ApiRequest {
 		return envIndex;
 	}
 
-	public void setEnvIndex(int envIndex) {
+	public void setEnvIndex(final int envIndex) {
 		this.envIndex = envIndex;
 	}
 
@@ -38,7 +38,7 @@ public class ApiRequest {
 		return funcIndex;
 	}
 
-	public void setFuncIndex(int funcIndex) {
+	public void setFuncIndex(final int funcIndex) {
 		this.funcIndex = funcIndex;
 	}
 
@@ -46,7 +46,7 @@ public class ApiRequest {
 		return headers;
 	}
 
-	public void setHeaders(Map<String, String> headers) {
+	public void setHeaders(final Map<String, String> headers) {
 		this.headers = headers;
 	}
 
@@ -54,7 +54,7 @@ public class ApiRequest {
 		return params;
 	}
 
-	public void setParams(Map<String, String> params) {
+	public void setParams(final Map<String, String> params) {
 		this.params = params;
 	}
 
@@ -62,7 +62,7 @@ public class ApiRequest {
 		return body;
 	}
 
-	public void setBody(Map<String, String> body) {
+	public void setBody(final Map<String, String> body) {
 		this.body = body;
 	}
 

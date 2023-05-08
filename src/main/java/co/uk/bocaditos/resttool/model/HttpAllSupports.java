@@ -128,6 +128,10 @@ public class HttpAllSupports {
 
 	public StringBuilder getRestQueryParams(final List<HttpField> paramDefs, final ApiRequest request, 
 			final StringBuilder buf) throws RestToolError {
+		if (request.getParams() == null) {
+			return buf;
+		}
+
 		final int length = buf.length();
 
 		for (final Map.Entry<String, String> entry : request.getParams().entrySet()) {
@@ -179,7 +183,7 @@ public class HttpAllSupports {
 				.filter(f -> f.getName().equals(entry.getKey()))
 				.findFirst().orElseThrow(() -> new RestToolError(HttpStatus.BAD_REQUEST, 
 					"Failed to find request body field {} in definitions", entry.getKey()));
-			final String[] names = field.getPath().split(".");
+			final String[] names = field.getPath().split("\\.");
 			final int last = names.length - 1;
 			Map<String, Object> obj = body;
 
