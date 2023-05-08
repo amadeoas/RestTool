@@ -9,6 +9,7 @@ package co.uk.bocaditos.resttool.model;
 public class HttpField {
 	
 	private String name;
+	private String path; // Name of all fields path, i.e. <field_name1>[.<field_name2>...]
 	private HttpInputType type;
 	private String value;
 	private String pattern;
@@ -25,6 +26,14 @@ public class HttpField {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public HttpInputType getType() {

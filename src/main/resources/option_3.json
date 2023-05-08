@@ -43,6 +43,7 @@
 		}], 
 		"body": [{
 			"name": "Firstname", 
+			"path": "firstname",
 			"type": "TEXT", 
 			"required": true, 
 			"pattern": "^[a-zA-Z ]{1,20}$", 
@@ -52,6 +53,7 @@
 			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
 		}, {
 			"name": "Surname", 
+			"path": "surname",
 			"type": "TEXT", 
 			"required": true, 
 			"pattern": "^[a-zA-Z ]{1,20}$", 
@@ -61,6 +63,7 @@
 			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
 		}, {
 			"name": "Date of birth", 
+			"path": "birthday",
 			"type": "DATE", 
 			"required": true, 
 			"info": "Custmer's date of birth, which it's required.", 

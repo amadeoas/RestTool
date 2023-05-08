@@ -172,10 +172,14 @@ public class HttpAllSupports {
 		final List<HttpField> fields = func.getBody();
 		final Map<String, Object> body = new HashMap<>();
 
-		for (final Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
+		for (final Map.Entry<String, String> entry : request.getBody().entrySet()) {
 			validate("body field", fields, entry);
-
-			final String[] names = entry.getKey().split(".");
+			
+			final HttpField field = fields.stream()
+				.filter(f -> f.getName().equals(entry.getKey()))
+				.findFirst().orElseThrow(() -> new RestToolError(HttpStatus.BAD_REQUEST, 
+					"Failed to find request body field {} in definitions", entry.getKey()));
+			final String[] names = field.getPath().split(".");
 			final int last = names.length - 1;
 			Map<String, Object> obj = body;
 

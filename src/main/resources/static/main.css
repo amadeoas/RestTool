@@ -60,7 +60,7 @@ button span {
 
 #menu {
 	height: 100%;
-	width: 12.4em;
+	width: 12.2em;
 	min-width: 6em;
 	border-right: 1px solid #000000;
 }
@@ -91,6 +91,10 @@ button span {
 
 #title {
 	flex-grow: 1;
+}
+
+#title >p {
+	margin: 2px 0px 2px 0px;
 }
 
 #contentBHead {

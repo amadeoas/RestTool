@@ -441,9 +441,9 @@
 		// Action from submitting form
 		var v = getRestHosts();
 console.log("Host: " + v);
-v = getRestHeaders();
+v = JSON.stringify(getRestHeaders());
 console.log("Headers: " + v);
-v = getRequest();
+v = JSON.stringify(getRequest());
 console.log("Request: " + v);
 		fetch(getRestHosts(), {
 				method: 'POST', 
@@ -485,7 +485,7 @@ console.log("Request: " + v);
 		const params = buildObj("param", 
 				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].params);
 
-		console.log("Params: " + params);
+		console.log("Params: " + JSON.stringify(params));
 
 		return params;
 	}
@@ -494,7 +494,7 @@ console.log("Request: " + v);
 		const hs = buildObj("header", 
 				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].headers);
 
-		console.log("Header: " + hs);
+		console.log("Header: " + JSON.stringify(hs));
 
 		return hs;
 	}
@@ -503,7 +503,7 @@ console.log("Request: " + v);
 		const body = buildObj("body", 
 				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].body);
 
-		console.log("Body: " + body);
+		console.log("Body: " + JSON.stringify(body));
 
 		return body;
 	}
