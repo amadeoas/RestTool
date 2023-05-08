@@ -26,7 +26,7 @@ import co.uk.bocaditos.resttool.model.HttpAllSupports;
 public class RestToolController {
 
 	private static final Logger logger = LogManager.getLogger(RestToolController.class);
-	private static final String NAME = "REST API UI Tool";
+	private static final String NAME = "REST APIs UI Tool";
 
 	private final HttpAllSupports supported;
 	
