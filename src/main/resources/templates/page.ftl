@@ -18,7 +18,7 @@
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
 
 
-		function init(index, err) {
+	function init(index, err) {
 		apiDetails.error = err; 
 
 		init(index);
@@ -438,98 +438,55 @@
 
 	function sendForm() {
 		// Action from submitting form
-	console.log("Form: sendForm()");
-		fetch(getRestHost(), {
-				method: getMethod(), 
+		var v = getRestHosts();
+console.log("Host: " + v);
+v = getRestHeaders();
+console.log("Headers: " + v);
+v = getRequest();
+console.log("Request: " + v);
+		fetch(getRestHosts(), {
+				method: 'POST', 
 				headers: getRestHeaders(), 
-				body: JSON.stringify(getRestBody())
+				body: JSON.stringify(getRequest())
 			})
 			.then(response => response.json())
-			.then(json => console.log(json))
+			.then(json => console.log('JSON: ' + json))
 			.catch(err => init(-2, err));
 	}
 
-	function getMethod() {
-		return document.getElementById('method').value;
+	function getRestHosts() {
+		return window.location.host + '/execute';
 	}
 
 	function getRestHeaders() {
-		const api = apiDetails.supported[apiDetails.index];
-		const func = api.funcs[api.funcIndex];
-		var headers = new Object();
-		var index = -1;
-		var input;
-
-		while ((input = ("sec-request-header-" + (++index))) != null) {
-			headers[func.headers[index]] = input.value;
-		}
+		const headers = new Object();
+		
+		headers["Content-Type"] = "application/json";
 
 		return headers;
 	}
 
-	function getRestHost() {
-		return document.getElementById('host').value + getRestParams();
+	function getRequest() {
+		const request = new Object();
+		const func = apiDetails.supports[apiDetails.index];
+
+		request.apiIndex = apiDetails.index;
+		request.envIndex = func.envIndex;
+		request.funcIndex = func.funcIndex;
+		request.params = buildParams();
+		request.headers = buildHeaders();
+		request.body = buildBody();
+
+		return request;
 	}
 
-	function getRestParams() {
-		const api = apiDetails.supported[apiDetails.index];
-		const func = api.funcs[api.funcIndex];
-		var params = "";
-		var index = -1;
-		var input;
+	function buildParams() {
+		const params = buildObj("param", 
+				apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex].params);
 
-		while ((input = ("sec-request-header-" + (++index))) != null) {
-			if (params.length > 0) {
-				params += "&";
-			}
-			params += func.params[index] + "=" + encodeURIComponent(input.value);
-		}
-
-		if (params.length > 0) {
-			params = "?" + params;
-		}
+		console.log("Params: " + params);
 
 		return params;
-	}
-	
-	function getRestBody() {
-		const api = apiDetails.supported[apiDetails.index];
-		const func = api.funcs[api.funcIndex];
-		var body = new Object();
-		var index = -1;
-		var input;
-
-		while ((input = ("sec-request-header-" + (++index))) != null) {
-			body[func.body[index]] = input.value;
-		}
-
-		return body;
-	}
-
-	function buildUrl() {
-		var func = apiDetails.supports[apiDetails.index].funcs[apiDetails.supports[apiDetails.index].funcIndex];
-		var params = func.params;
-		var url = apiDetails.supports[apiDetails.index].envs[apiDetails.supports[apiDetails.index].envIndex] + "/" + func.func;
-
-		if (params.length > 0) {
-			url += "?";
-			for (var i = 0; i < params.length; i++) {
-				const param = params[i];
-
-				if (i > 0) {
-					url += "&";
-				}
-
-				if (typeof param.value != 'undefined') {
-					url += param.name + "=" + param.value;
-				} else {
-					url += param.name + "=" + getInput("param", i);
-				}
-			}
-		}
-		console.log("URL: " + url);
-
-		return url;
 	}
 
 	function buildHeaders() {
@@ -551,7 +508,7 @@
 	}
 
 	function buildObj(name, viewdata) {
-		if (viewdata.length == 0) {
+		if (viewdata == null || viewdata.length == 0) {
 			return;
 		}
 
@@ -561,10 +518,14 @@
 			const data = viewdata[i];
 
 			if (typeof data.value != 'undefined') {
-				obj[data.name] = header.value;
+				obj[data.name] = data.value;
 			} else {
 				// Get it from the form
-				obj[data.name] = getInput(name, i);
+				const value = getInput(name, i);
+
+				if (value != 'undefined' & value.length > 0) {
+					obj[data.name] = getInput(name, i);
+				}
 			}
 		}
 
@@ -572,12 +533,8 @@
 	}
 
 	function getInput(name, index) {
-		return document.getElementById(name + index).value;
+		return document.getElementById('sec-request-' + name + '-' + index).value;
 	}
-//
-//	function handleClickOnDetails(e) {
-//	//  	console.log("Tab ID: " + e.currentTarget.id);
-//	}
 
 	function openFirstOfDetails() {
 	  	let details = document.querySelectorAll("details[open]");

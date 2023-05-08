@@ -11,8 +11,8 @@ public class HttpField {
 	private String name;
 	private HttpInputType type;
 	private String pattern;
-	private int min; // minimum value for numbers and minimum length for text
-	private int max; // maximum value for numbers and maximum length for text
+	private Integer min; // minimum value for numbers and minimum length for text
+	private Integer max; // maximum value for numbers and maximum length for text
 	private boolean required;
 	private boolean disabled;
 	private String error;
@@ -42,19 +42,19 @@ public class HttpField {
 		this.pattern = pattern;
 	}
 
-	public int getMin() {
-		return min;
+	public Integer getMin() {
+		return this.min;
 	}
 
-	public void setMin(int min) {
+	public void setMin(final Integer min) {
 		this.min = min;
 	}
 
-	public int getMax() {
-		return max;
+	public Integer getMax() {
+		return this.max;
 	}
 
-	public void setMax(int max) {
+	public void setMax(final Integer max) {
 		this.max = max;
 	}
 

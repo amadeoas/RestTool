@@ -2,6 +2,7 @@ package co.uk.bocaditos.resttool.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 
@@ -23,14 +24,10 @@ public class FreeMarkerViewConfig {
 
 	    return resolver; 
 	}
-//
-//	@Bean 
-//	public FreeMarkerConfigurer freemarkerConfig() { 
-//	    final FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
-//
-//	    freeMarkerConfigurer.setTemplateLoaderPath("/WEB-INF/views/ftl/");
-//
-//	    return freeMarkerConfigurer; 
-//	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
 } // end class FreeMarkerViewResolver

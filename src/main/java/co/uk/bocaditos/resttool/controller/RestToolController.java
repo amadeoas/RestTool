@@ -7,9 +7,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import co.uk.bocaditos.resttool.config.service.ProcessService;
+import co.uk.bocaditos.resttool.model.ApiRequest;
 import co.uk.bocaditos.resttool.model.HttpAllSupports;
 
 
@@ -25,6 +29,8 @@ public class RestToolController {
 	private static final String NAME = "REST API UI Tool";
 
 	private final HttpAllSupports supported;
+	
+	private final ProcessService service;
 
 
 	/**
@@ -49,7 +55,8 @@ public class RestToolController {
 	} // end class HttpAllSupportsIndex()
 
 
-	public RestToolController(final ObjectMapper mapper) throws IOException {
+	public RestToolController(final ObjectMapper mapper, final ProcessService service) throws IOException {
+		this.service = service;
 		this.supported = new HttpAllSupports(NAME, mapper);
 	}
 
@@ -82,6 +89,12 @@ public class RestToolController {
     public String login(final Model model) {
         return option(model, this.supported.getNumApis());
     }
+
+    @PostMapping("/execute")
+    public Object perform(@RequestBody final ApiRequest request) throws RestToolError {
+    	return this.service.process(this.supported.getMethod(request), this.supported.getRestHost(request), 
+    			this.supported.getRestHeaders(request), this.supported.getRestBody(request));
+    }
     
     private String option(final Model model, final int index) {
     	logger.debug("Setting up {} page...", getApiName(index));
@@ -95,7 +108,7 @@ public class RestToolController {
 
     private String getApiName(final int index) {
     	return (index < 0) 
-    			? "home" : ((index >= this.supported.getNumApis()) 
+    			? "Home" : ((index >= this.supported.getNumApis()) 
     					? "Login" : this.supported.get(index).getName());
     }
 
