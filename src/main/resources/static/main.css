@@ -159,6 +159,7 @@ button span {
 
 .cardFooter {
 	border-top: 1px solid #000000;
+	text-align: right;
 }
 
 
@@ -166,11 +167,13 @@ button span {
 	display: inline-block;
 	text-align: center;
 	border: 1px solid #808080;
-	padding: 2px 2px 2px 2px;
+	padding: 2px 4px 2px 4px;
+	margin: 4px 2px 4px 2px;
 	font-size: 12px;
 	border-radius: 4px;
-	background: #87CEFA;
+	background: #fff;
 	cursor: pointer;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 #contentHead {

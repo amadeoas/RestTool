@@ -34,7 +34,7 @@
         		<div id="contentBody">
         			<div id="homeView" hidden>
 	        			<div id="contentBHead">
-		           			See below the APIs supported by this UI.
+		           			See below a short description and access for each the APIs supported by this UI.
 	        			</div>
 	        			<div id="contentCards">
 	      		  			<ul id="cards" class="card-container">
