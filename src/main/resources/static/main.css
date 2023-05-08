@@ -20,6 +20,7 @@ body {
 	border-radius: 4px;
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 	cursor: pointer;
+	color: #006;
 }
 
 button:disabled,
@@ -50,6 +51,10 @@ button span {
 	width: 100%;
 	display: flex;
 	background: #ffffff;
+}
+
+#menuHead {
+	color: #006;
 }
 
 #menu {
@@ -87,11 +92,9 @@ button span {
 	flex-grow: 1;
 }
 
-#icon {
-}
-
 #contentBHead {
 	width: 100%;
+	color: #006;
 }
 
 #contentCards {
@@ -101,6 +104,7 @@ button span {
 /* Add some padding inside the card container */
 .container {
 	padding: 2px 1px;
+	color: #006;
 }
 
 .card {
@@ -124,9 +128,6 @@ button span {
 	border-bottom: 1px solid #000000;
 	margin-top: 4px;
 	margin-bottom: 4px;
-}
-
-#contentBHead {
 }
 
 #contentCards {
@@ -155,6 +156,8 @@ button span {
 .cardHeader {
 	font-weight: bold;
 	border-bottom: 1px solid #000000;
+	font-size: 20px;
+	color: #006;
 }
 
 .cardFooter {
@@ -184,10 +187,15 @@ button span {
 
 #contentTitle {
 	flex-grow: 1;
+	color: #006;
 }
 
+#requestDetails {
+	color: #006;
+}
 
-#suboption {
+#responseDetails {
+	color: #006;
 }
 
 .tab-panels {
@@ -230,6 +238,7 @@ button span {
 	border-bottom: 1px solid transparent;
 	border-radius: 4px;
 	cursor: pointer;
+	color: #006;
 }
 
 .tabset > label:hover,
@@ -278,6 +287,7 @@ button span {
 
 .header-field > td label {
 	margin-left: 1px;
+	color: #006;
 }
 .header-field > td input:valid {
 	border-right: 1px solid #ccc;

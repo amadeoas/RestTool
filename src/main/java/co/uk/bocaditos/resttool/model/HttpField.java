@@ -10,6 +10,7 @@ public class HttpField {
 	
 	private String name;
 	private HttpInputType type;
+	private String value;
 	private String pattern;
 	private Integer min; // minimum value for numbers and minimum length for text
 	private Integer max; // maximum value for numbers and maximum length for text
@@ -32,6 +33,14 @@ public class HttpField {
 
 	public void setType(HttpInputType type) {
 		this.type = type;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public String getPattern() {
