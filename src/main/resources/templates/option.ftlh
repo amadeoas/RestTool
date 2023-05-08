@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>REST API UI Tool</title>
+		<title><${apiName}</title>
 		<link rel="shortcut icon" href="#" />
 		<link rel="stylesheet" href="main.css">
 	</head>
@@ -12,7 +12,7 @@
         	<div id="menu">
         		<div id="menuHead">
         			<div id="title">
-	        			<p>Test Tool</p>
+	        			<p>${apiName}</p>
 	        		</div>
 	        		<div id="icon">
 	        			<img title="Title" src="images/face-icon.png" height="20px" style="margin: 0;" />
@@ -34,7 +34,7 @@
         		<div id="contentBody">
         			<div id="homeView" hidden>
 	        			<div id="contentBHead">
-		           			See below a short description and access for each the APIs supported by this UI.
+		           			See below a short description and access for each of the APIs supported by this UI.
 	        			</div>
 	        			<div id="contentCards">
 	      		  			<ul id="cards" class="card-container">
@@ -100,7 +100,7 @@
            			</div>
            			
            			<div id="loginView" hidden>
-	           			Right Login
+	           			<p>Right Login</p>
            			</div>
            			
 					<div id="errorView" hidden>

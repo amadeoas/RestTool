@@ -51,12 +51,12 @@ public class HttpAllSupports {
 
 
 	public HttpAllSupports(final String name, final ObjectMapper mapper) throws IOException {
-		logger.info("Loading supported APIs...");
+		this.version = "0.0";
+		logger.info("{} v{} loading supported APIs...", name, version);
 
 		int i = 0;
 		HttpSupport support;
 
-		this.version = "0.0";
 		this.name = name;
 		this.supports = new ArrayList<>();
 		while ((support = loadJson(mapper, "option_" + ++i + ".json")) != null) {
@@ -64,7 +64,7 @@ public class HttpAllSupports {
 			logger.debug("Loaded API {} definitions at index {}", support.getName(), i - 1);
 		}
 		this.json = mapper.writeValueAsString(this);
-		logger.info("Loaded {} supported APIs v{}", this.supports.size(), this.version);
+		logger.info("{} v{} loaded {} supported APIs", name, this.version, this.supports.size());
 	}
 
 	/**

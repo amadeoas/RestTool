@@ -99,6 +99,7 @@ public class RestToolController {
     private String option(final Model model, final int index) {
     	logger.debug("Setting up {} page...", getApiName(index));
 
+    	model.addAttribute("apiName", this.supported.getName());
     	model.addAttribute("data", this.supported.toString());
     	model.addAttribute("index", index);
     	logger.debug("{} page was successfully set up", getApiName(index));

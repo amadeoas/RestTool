@@ -6,14 +6,15 @@
 			this.supports = data.supports;
 		}
 	};
-	
+
 	class HttpAllSupportsIndex extends HttpAllSupports {
 		constructor(data, index) {
 			super(data);
 			this.index = index;
 		}
 	};
-	
+
+
 	const baseTabNames = ["header", "params", "body"];
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
 

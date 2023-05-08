@@ -54,6 +54,7 @@ button span {
 }
 
 #menuHead {
+	font-size: 20px;
 	color: #006;
 }
 
@@ -70,7 +71,7 @@ button span {
 }
 
 #menuHead {
-	height: 2em;
+/*	height: 2em; */
 	display: flex;
 	border-bottom: 1px solid #000000;
 }
@@ -177,6 +178,7 @@ button span {
 	background: #fff;
 	cursor: pointer;
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	color: #006;
 }
 
 #contentHead {
@@ -187,6 +189,10 @@ button span {
 
 #contentTitle {
 	flex-grow: 1;
+}
+
+#contentTitle > p {
+	font-size: 20px;
 	color: #006;
 }
 
@@ -318,4 +324,8 @@ textarea:read-write {
 
 .invalid {
 	color: red !important;
+}
+
+#loginView > p {
+	color: #006;
 }
