@@ -1,4 +1,3 @@
-<script type="text/javascript">
 	class HttpAllSupports {
 		constructor(data) {
 			this.version = data.version;
@@ -16,6 +15,7 @@
 
 
 	const baseTabNames = ["header", "params", "body"];
+	const httpStatus = {"405": ["Method Not Allowed (405)", "The HyperText Transfer Protocol (HTTP) 405 Method Not Allowed response status code indicates that the server knows the request method, but the target resource doesn't support this method."]};
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
 
 
@@ -70,13 +70,6 @@
 		showIt("optionsView"); 
 
 		buildEnvs();
-
-		// Handle for details
-		const detailsElements = document.querySelectorAll("details");
-
-//		detailsElements.forEach(function (item) {
-//			item.addEventListener("click", handleClickOnDetails);
-//		});
 		openFirstOfDetails();
 	}
 
@@ -443,15 +436,92 @@
 
 		xhr.onload = function() {
 			if (xhr.status == 200) {
-				console.log("Response: " + JSON.stringify(xhr.response));
+				responseView(xhr);
 			} else {
-				console.log('error' + xhr.status + ', "' + xhr.statusText + '"');
+				responseErrorView(xhr);
 			}
 		};
 		xhr.open('POST', '/execute', true);
 		xhr.setRequestHeader('Content-type', 'application/json');
 		xhr.setRequestHeader('Accept', 'application/json');
 		xhr.send(buildRequest());
+	}
+	
+	function responseView(xhr) {
+		console.log("Response: " + JSON.stringify(xhr.response));
+
+		buildResponseBodyView(xhr);
+		buildResponseHeadersView(xhr);
+	}
+	
+	function responseErrorView(xhr) {
+		console.log('error' + xhr.status + ', "' + xhr.statusText + '"');
+		buildResponseHeadersView(xhr);
+		buildResponseErrorView(xhr);
+	}
+
+	function buildResponseHeadersView(xhr) {
+		const headerView = document.getElementById('responseHeader');
+		const headers = xhr.getAllResponseHeaders().trim().split(/[\r\n]+/);
+
+		removeAllChildren(headerView);
+		view = document.createElement('table');
+		headers.forEach((line) => {
+	      	const parts = line.split(': ');
+    	  	const header = parts.shift();
+      		const value = parts.join(': ');
+			var div = document.createElement('tr');
+			var cell = document.createElement('td');
+			var label = document.createElement('label');
+	
+			label.innerHTML = header + ":";
+			div.className = "header-field";
+			cell.appendChild(label);
+			div.appendChild(cell);
+	
+			var input = document.createElement('input');
+	
+			cell = document.createElement('td');
+			input.type = 'text';
+			input.value = value;
+			input.disabled = true;
+			cell.appendChild(input);
+			div.appendChild(cell);
+
+			view.appendChild(div);
+		});
+		headerView.appendChild(view);
+
+		document.getElementById('tab-response-header').disabled = false;
+	}
+
+	function buildResponseBodyView(xhr) {
+		const bodyView = document.getElementById('responseBody');
+		let view = document.createElement('textarea');
+
+		removeAllChildren(bodyView);
+		view.id = "responseTextarea";
+		view.innerHTML = xhr.response;
+		bodyView.appendChild(view);
+
+		document.getElementById('tab-response-body').disabled = (typeof xhr.response == 'undefined');
+	}
+	
+	function buildResponseErrorView(xhr) {
+		const bodyView = document.getElementById('responseBody');
+		var view = document.createElement('p');
+
+		removeAllChildren(bodyView);
+		view.id = "errorTitle";
+		view.innerHTML = httpStatus[xhr.status][0];
+		bodyView.appendChild(view);
+
+		view = document.createElement('p');
+		view.id = "errorDescription";
+		view.innerHTML = httpStatus[xhr.status][1];
+		bodyView.appendChild(view);
+
+		document.getElementById('tab-response-body').disabled = false;
 	}
 
 	function buildRequest() {
@@ -615,4 +685,3 @@
 
 		return li;
 	}
-</script>

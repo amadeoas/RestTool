@@ -109,6 +109,8 @@
         	</div>
     	</div>
 
-		<#include "page.ftl" />
+		<script type="text/javascript">
+			<#include "page.js" />
+		</script>
 	</body>
 </html>

@@ -1,0 +1,47 @@
+[{
+	"firstname": "Antonio",
+	"surname": "Sanchez Salamnca",
+	"birthday": "02-04-2002",
+	"contacts": {
+		"address": {
+			"street": "C/ Reputación",
+			"number": "12",
+			"city": "Valencia",
+			"postcode": "46001",
+			"county": "Valencia",
+			"country": "Spain"
+		},
+		"telephone": {
+			"number": "07805200026",
+			"type": "mobile",
+			"country": "034"
+		},
+		"email": {
+			"address": "alguien@bocaditos.co.uk",
+			"type": "personal"
+		}
+	}
+}, {
+	"firstname": "Francisco",
+	"surname": "Blasco Ibañez",
+	"birthday": "02-04-2002",
+	"contacts": {
+		"address": {
+			"street": "London Road",
+			"number": "1",
+			"city": "Sandbach",
+			"postcode": "CW10 1RT",
+			"county": "Cheshire",
+			"country": "United Kindom"
+		},
+		"telephone": {
+			"number": "07803212311",
+			"type": "mobile",
+			"country": "044"
+		},
+		"email": {
+			"address": "soneone@bocaditos.co.uk",
+			"type": "business"
+		}
+	}
+}]
