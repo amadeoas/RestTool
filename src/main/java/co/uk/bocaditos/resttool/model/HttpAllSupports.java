@@ -50,7 +50,8 @@ public class HttpAllSupports {
 	private final String json; // JSON form of the full object 
 
 
-	public HttpAllSupports(final String name, final ObjectMapper mapper) throws IOException {
+	public HttpAllSupports(final String name, final ObjectMapper mapper) throws IOException, 
+			ViewModelException {
 		this.version = "0.0";
 		logger.info("{} v{} loading supported APIs...", name, version);
 
@@ -60,6 +61,7 @@ public class HttpAllSupports {
 		this.name = name;
 		this.supports = new ArrayList<>();
 		while ((support = loadJson(mapper, "option_" + ++i + ".json")) != null) {
+			support.validate();
 			this.supports.add(support);
 			logger.debug("Loaded API {} definitions at index {}", support.getName(), i - 1);
 		}

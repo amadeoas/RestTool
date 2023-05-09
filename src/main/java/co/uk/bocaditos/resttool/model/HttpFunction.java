@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpMethod;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 /**
  * Representation of a request.
@@ -13,33 +15,39 @@ import org.springframework.http.HttpMethod;
 public class HttpFunction {
 
 	/**
-	 * .
+	 * The query text.
 	 */
+	@JsonProperty(value="query", required=false)
 	private String query;
 
 	/**
 	 * The HTTP method. It is required.
 	 */
+	@JsonProperty(value="method", required=true)
 	private HttpMethod method;
 
 	/**
 	 * Information about the function, not required.
 	 */
+	@JsonProperty(value="info", required=false)
 	private String info;
 
 	/**
 	 * The HTTP request headers.
 	 */
+	@JsonProperty(value="headers", required=true)
 	private List<HttpField> headers;
 
 	/**
 	 * The HTTP request query parameters, if any.
 	 */
+	@JsonProperty(value="params", required=false)
 	private List<HttpField> params;
 
 	/**
 	 * The HTTP request body, if any.
 	 */
+	@JsonProperty(value="body", required=false)
 	private List<HttpField> body;
 
 

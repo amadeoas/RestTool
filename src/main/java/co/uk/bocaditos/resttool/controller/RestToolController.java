@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import co.uk.bocaditos.resttool.config.service.ProcessService;
 import co.uk.bocaditos.resttool.model.ApiRequest;
 import co.uk.bocaditos.resttool.model.HttpAllSupports;
+import co.uk.bocaditos.resttool.model.ViewModelException;
 
 
 /**
@@ -55,7 +56,8 @@ public class RestToolController {
 	} // end class HttpAllSupportsIndex()
 
 
-	public RestToolController(final ObjectMapper mapper, final ProcessService service) throws IOException {
+	public RestToolController(final ObjectMapper mapper, final ProcessService service) 
+			throws IOException, ViewModelException {
 		this.service = service;
 		this.supported = new HttpAllSupports(NAME, mapper);
 	}

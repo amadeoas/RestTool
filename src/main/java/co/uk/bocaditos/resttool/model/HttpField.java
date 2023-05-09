@@ -1,5 +1,6 @@
 package co.uk.bocaditos.resttool.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Representation of a field.
@@ -7,16 +8,28 @@ package co.uk.bocaditos.resttool.model;
  * @author aasco
  */
 public class HttpField {
-	
+
+	@JsonProperty(value="name", required=true)
 	private String name;
+	@JsonProperty(value="path", required=true)
 	private String path; // Name of all fields path, i.e. <field_name1>[.<field_name2>...]
+	@JsonProperty(value="type", required=true)
 	private HttpInputType type;
+	@JsonProperty(value="value", required=false)
 	private String value;
+	@JsonProperty(value="pattern", required=false)
 	private String pattern;
+	@JsonProperty(value="min", required=false)
 	private Integer min; // minimum value for numbers and minimum length for text
+	@JsonProperty(value="max", required=false)
 	private Integer max; // maximum value for numbers and maximum length for text
+	@JsonProperty(value="required", required=false)
 	private boolean required;
+	@JsonProperty(value="disabled", required=false)
 	private boolean disabled;
+	@JsonProperty(value="info", required=false)
+	private String info;
+	@JsonProperty(value="error", required=false)
 	private String error;
 
 
@@ -26,6 +39,14 @@ public class HttpField {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInfo() {
+		return this.info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
 	}
 
 	public String getPath() {
