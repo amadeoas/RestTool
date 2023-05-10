@@ -348,3 +348,8 @@ textarea:read-write {
 	margin-top: 10px;
 	margin-right: 2px;
 }
+
+#responseTextarea {
+	width: 100%;
+	height: 100%;
+}
