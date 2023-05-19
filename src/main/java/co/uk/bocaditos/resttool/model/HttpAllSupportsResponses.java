@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class HttpAllSupportsResponses extends HttpAllSupports {
 
-	private static final String NAME = "REST APIs UI Tool";
+	private static final String NAME = "REST APIs UI";
 
 	private List<List<String>> responses;
 

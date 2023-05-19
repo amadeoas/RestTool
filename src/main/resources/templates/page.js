@@ -443,7 +443,7 @@
 				responseErrorView(xhr);
 			}
 			press(element);
-			press(document.getElementById('lbl-response-body'));
+			triggerClick(document.getElementById('tab-response-body'));
 		};
 		xhr.open('POST', '/execute', true);
 		xhr.setRequestHeader('Content-type', 'application/json');
@@ -490,8 +490,22 @@
 		});
 	}
 	
+	function triggerClick(element) {
+		var event = new MouseEvent('click', {
+			'view': window,
+			'bubbles': true,
+			'cancelable': true
+		});
+
+		element.dispatchEvent(event);
+	}
+	
 	function press(element) {
-		var keyboardEvent = new KeyboardEvent("keypress", {bubbles: true});
+		dispatchEvent("keypress", element);
+	}
+	
+	function dispatchEvent(action, element) {
+		var keyboardEvent = new KeyboardEvent(action, {bubbles: true});
 
 		// You can try charCode or keyCode but they are deprecated
 		Object.defineProperty(keyboardEvent, "key", {
