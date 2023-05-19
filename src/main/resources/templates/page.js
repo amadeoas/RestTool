@@ -435,11 +435,15 @@
 		let xhr = new XMLHttpRequest();
 
 		xhr.onload = function() {
+			var element = document.getElementById('responseDetails');
+
 			if (xhr.status == 200) {
 				responseView(xhr);
 			} else {
 				responseErrorView(xhr);
 			}
+			press(element);
+			press(document.getElementById('lbl-response-body'));
 		};
 		xhr.open('POST', '/execute', true);
 		xhr.setRequestHeader('Content-type', 'application/json');
@@ -452,12 +456,50 @@
 
 		buildResponseBodyView(xhr);
 		buildResponseHeadersView(xhr);
+
+		// Open it
+		document.getElementById('requestDetails').removeAttribute('open');
+		document.getElementById('responseDetails').setAttribute('open', true);
+		document.getElementById('responseBody').setAttribute('open', true);
 	}
 	
 	function responseErrorView(xhr) {
 		console.log('error' + xhr.status + ', "' + xhr.statusText + '"');
 		buildResponseHeadersView(xhr);
 		buildResponseErrorView(xhr);
+
+		// Open it
+		document.getElementById('requestDetails').removeAttribute('open');
+		document.getElementById('responseDetails').setAttribute('open', true);
+		document.getElementById('responseBody').setAttribute('open', true);
+	}
+	
+	function initialiseClose() {
+		// Get all the details element
+		const details = document.querySelectorAll("details");
+
+		details.forEach((targetDetail) => {
+			targetDetail.addEventListener("click", () => {
+				// Close all the details that are not targetDetail
+				details.forEach((detail) => {
+					if (detail !== targetDetail) {
+						detail.removeAttribute("open");
+					}
+				});
+		  	});
+		});
+	}
+	
+	function press(element) {
+		var keyboardEvent = new KeyboardEvent("keypress", {bubbles: true});
+
+		// You can try charCode or keyCode but they are deprecated
+		Object.defineProperty(keyboardEvent, "key", {
+  			get() {
+    			return "Enter";
+  			},
+		});
+		element.dispatchEvent(keyboardEvent);
 	}
 
 	function buildResponseHeadersView(xhr) {
@@ -501,6 +543,7 @@
 
 		removeAllChildren(bodyView);
 		view.id = "responseTextarea";
+		view.rows = 30;
 		view.innerHTML = xhr.response;
 		bodyView.appendChild(view);
 
@@ -685,3 +728,7 @@
 
 		return li;
 	}
+
+
+	// Proceed
+	initialiseClose();
