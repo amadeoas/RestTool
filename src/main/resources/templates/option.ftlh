@@ -77,20 +77,20 @@
 	  								</div>
 								</div>
 							</details>
-							<details id="responseDetails">
+							<details id="responseDetails" hidden="true">
 	  							<summary>Response</summary>
 	  							<div id="response" class="tabset">
 	  								<!-- Tab Headers -->
-	  								<input type="radio" name="tabset" id="tab-response-header" aria-controls="responseHeader" disabled>
+	  								<input type="radio" name="tabset" id="tab-response-header" aria-controls="sec-response-header" disabled>
 	  								<label id="lbl-response-header" for="tab-response-header">Headers</label>
 	  								<!-- Tab Body -->
-	  								<input type="radio" name="tabset" id="tab-response-body" aria-controls="responseBody" disabled>
+	  								<input type="radio" name="tabset" id="tab-response-body" aria-controls="sec-response-body" disabled>
 	  								<label id="lbl-response-body" for="tab-response-body">Body</label>
 	  
 	  								<div class="tab-panels">
-	  									<section id="responseHeader" class="tab-panel">
+	  									<section id="sec-response-header" class="tab-panel">
 	  									</section>
-	  									<section id="responseBody" class="tab-panel">
+	  									<section id="sec-response-body" class="tab-panel">
 	  									</section>
 	  								</div>
 								</div>

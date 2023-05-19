@@ -17,6 +17,7 @@
 	const baseTabNames = ["header", "params", "body"];
 	const httpStatus = {"405": ["Method Not Allowed (405)", "The HyperText Transfer Protocol (HTTP) 405 Method Not Allowed response status code indicates that the server knows the request method, but the target resource doesn't support this method."]};
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
+	var firstTime = true;
 
 
 	function init(index, err) {
@@ -27,6 +28,11 @@
 
 	function init(index) {
 		buildMenu(index);
+
+		if (firstTime) {
+			firstTime = false;
+			initialiseClose();
+		}
 
 		if (index == -1) {
 			// Home page
@@ -435,12 +441,17 @@
 		let xhr = new XMLHttpRequest();
 
 		xhr.onload = function() {
-			var element = document.getElementById('responseDetails');
-
 			if (xhr.status == 200) {
 				responseView(xhr);
 			} else {
 				responseErrorView(xhr);
+			}
+
+			// Open response view
+			var element = document.getElementById('responseDetails');
+
+			if (element.hidden) {
+				element.hidden = false;
 			}
 			press(element);
 			triggerClick(document.getElementById('tab-response-body'));
@@ -460,7 +471,7 @@
 		// Open it
 		document.getElementById('requestDetails').removeAttribute('open');
 		document.getElementById('responseDetails').setAttribute('open', true);
-		document.getElementById('responseBody').setAttribute('open', true);
+		document.getElementById('sec-response-body').setAttribute('open', true);
 	}
 	
 	function responseErrorView(xhr) {
@@ -471,7 +482,7 @@
 		// Open it
 		document.getElementById('requestDetails').removeAttribute('open');
 		document.getElementById('responseDetails').setAttribute('open', true);
-		document.getElementById('responseBody').setAttribute('open', true);
+		document.getElementById('sec-response-body').setAttribute('open', true);
 	}
 	
 	function initialiseClose() {
@@ -484,6 +495,27 @@
 				details.forEach((detail) => {
 					if (detail !== targetDetail) {
 						detail.removeAttribute("open");
+					} else if (typeof detail.open != 'undefined') {
+						// Make sure one tab is open, if not open Body tab
+						var name = targetDetail.id.substring(0, targetDetail.id.length - "Details".length);
+						var notFound = true;
+
+						for (var type in baseTabNames) {
+							var n = 'tab-' + name + '-' + baseTabNames[type];
+							var element = document.getElementById(n);
+
+							if (element != null && typeof element.checked != 'undefined' 
+									&& element.checked) {
+								notFound = false;
+
+								break;
+							}
+						}
+
+						if (notFound) {
+							// Open Body
+							triggerClick(document.getElementById('tab-' + name + '-body'));
+						}
 					}
 				});
 		  	});
@@ -517,7 +549,7 @@
 	}
 
 	function buildResponseHeadersView(xhr) {
-		const headerView = document.getElementById('responseHeader');
+		const headerView = document.getElementById('sec-response-header');
 		const headers = xhr.getAllResponseHeaders().trim().split(/[\r\n]+/);
 
 		removeAllChildren(headerView);
@@ -552,7 +584,7 @@
 	}
 
 	function buildResponseBodyView(xhr) {
-		const bodyView = document.getElementById('responseBody');
+		const bodyView = document.getElementById('sec-response-body');
 		let view = document.createElement('textarea');
 
 		removeAllChildren(bodyView);
@@ -565,7 +597,7 @@
 	}
 	
 	function buildResponseErrorView(xhr) {
-		const bodyView = document.getElementById('responseBody');
+		const bodyView = document.getElementById('sec-response-body');
 		var view = document.createElement('p');
 
 		removeAllChildren(bodyView);
@@ -690,6 +722,9 @@
 				index++;
 			}
 		}
+		document.getElementById('responseDetails').hidden = true;
+		document.getElementById('requestDetails').open = true;
+		triggerClick(document.getElementById('tab-request-body'));
 	}
 
 	function createMenuItem(name, pageHref, index) {
@@ -742,7 +777,3 @@
 
 		return li;
 	}
-
-
-	// Proceed
-	initialiseClose();
