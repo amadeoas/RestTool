@@ -538,17 +538,24 @@
 
 		document.getElementById('popupLoginClose').addEventListener('click', function() {
 			closeLoginPopUp();
-			// TODO: un-disable options
+			// Keep disabled the options
 			loggedIn = null;
 			updateMenuItems();
 		});
 		document.getElementById('popupLoginSubmit').addEventListener('click', function() {
+			// TODO: disable login, send request, and then update from response
 			closeLoginPopUp();
 			// Un-disable options
-			loggedIn = function() {
-				this.expires = ''; 
-				this.token ='';
-			};
+			const time = (1 * 1 * 60 * 1000);
+
+			loggedIn = new Object();
+			loggedIn.expires = new Date().getTime() + time;
+			loggedIn.timeout = setTimeout(() => {
+					console.log("Time out the Logged in!");
+					showPopupLogin();
+				}, time
+			);
+			loggedIn.token = '';
 			updateMenuItems();
 		});
 		document.getElementById('popupClose').addEventListener('click', function() {
@@ -881,6 +888,9 @@
 		const a = document.getElementById('menu-item-' + apiDetails.supports.length);
 
 		if (a.innerHTML == 'Logout') {
+			if (loggedIn != null) {
+				clearTimeout(loggedIn.timeout);
+			}
 			loginIndex = 1;
 			loggedIn = null;
 			if (apiDetails.index != -1) {
