@@ -80,6 +80,19 @@ body {
     padding: 8px 0;
 }
 
+.disable-link {
+	pointer-events: none;
+	text-decoration: none;
+	color: #999 !important;
+}
+
+.disable-link-button {
+	pointer-events: none;
+	text-decoration: none;
+	color: #999 !important;
+	border: 1px solid #999 !important;
+}
+
 .button {
 	margin: 4px 4px 4px 4px;
 	padding-left: 2px;
@@ -160,7 +173,7 @@ button span {
 	flex-grow: 1;
 }
 
-#title >p {
+#title > p {
 	margin: 2px 0px 2px 0px;
 }
 

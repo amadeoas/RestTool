@@ -17,6 +17,7 @@
 	const baseTabNames = ["header", "params", "body"];
 	const httpStatus = {"405": ["Method Not Allowed (405)", "The HyperText Transfer Protocol (HTTP) 405 Method Not Allowed response status code indicates that the server knows the request method, but the target resource doesn't support this method."]};
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
+	var loggedIn = null;
 
 
 	window.addEventListener("load", function() {
@@ -40,45 +41,38 @@
 			// Home page
 			const cards = document.getElementById("cards");
 
-			hideIt("errorView");
 			hideIt("env");
 			hideIt("optionsView");
-			hideIt("loginView");
+			closeLoginPopUp();
 			showIt("homeView");
-			removeAllChildren(cards);
-			for (var i = 0; i < apiDetails.supports.length; i++) {
-				cards.appendChild(buildCard(i));
+			if (cards.childElementCount == 0) {
+				removeAllChildren(cards);
+				for (var i = 0; i < apiDetails.supports.length; i++) {
+					cards.appendChild(buildCard(i));
+				}
 			}
-
-			return;
 		} else if (index == -2) {
 			hideIt("homeView");
 			hideIt("env");
 			hideIt("optionsView");
-			hideIt("loginView");
-			showIt("errorView");
-			
-
-			return;
+			closeLoginPopUp();
 		} else if (apiDetails.index >= apiDetails.supports.length) {
 			// Login page
-			hideIt("errorView");
 			hideIt("homeView");
 			hideIt("env");
 			hideIt("optionsView");
-			showIt("loginView");
+			showLoginPopUp();
+		} else {
+			// Build one of the options
+			document.getElementById("homeView").hidden = true;
+			showIt("optionsView"); 
 
-			return;
+			buildEnvs();
+			openFirstOfDetails();
 		}
+		apiDetails.index = index;
 
-		// Build one of the options
-		hideIt("errorView");
-		document.getElementById("homeView").hidden = true;
-		document.getElementById("loginView").hidden = true;
-		showIt("optionsView"); 
-
-		buildEnvs();
-		openFirstOfDetails();
+		updateMenuItems();
 	}
 
 	function buildEnvs() {
@@ -127,7 +121,13 @@
 			menu.appendChild(createMenuItem(apiDetails.supports[i].name, "option" + (i+1), i));
 		}
 		menu.appendChild(document.createElement('hr'));
-		menu.appendChild(createMenuItem("Login", "login", apiDetails.supports.length));
+
+		var item = createMenuItem("Login", "login", apiDetails.supports.length);
+
+		item.onclick = function() {
+			showPopupLogin();
+		}
+		menu.appendChild(item);
 
 		document.title = apiDetails.name;
 		if (index >= apiDetails.supports.length) {
@@ -536,17 +536,42 @@
 		  	});
 		});
 
+		document.getElementById('popupLoginClose').addEventListener('click', function() {
+			closeLoginPopUp();
+			// TODO: un-disable options
+			loggedIn = null;
+			updateMenuItems();
+		});
+		document.getElementById('popupLoginSubmit').addEventListener('click', function() {
+			closeLoginPopUp();
+			// Un-disable options
+			loggedIn = function() {
+				this.expires = ''; 
+				this.token ='';
+			};
+			updateMenuItems();
+		});
 		document.getElementById('popupClose').addEventListener('click', function() {
-			closePopUp();
+			closeMsgPopUp();
 		});
 		document.getElementById('popupAClose').addEventListener('click', function() {
-			closePopUp();
+			closeMsgPopUp();
 		});
 	}
 	
-	function closePopUp() {
-//		document.getElementById('main').style.display = 'flex';
+	function closeMsgPopUp() {
 		document.getElementById('allpopup').style.display = 'none';
+	}
+	
+	function closeLoginPopUp() {
+		var allLogin = document.getElementById('allpopupLogin');
+
+		if (allLogin.style.display != 'none') {
+			allLogin.style.display = 'none';
+		}
+
+		// Disable options
+		
 	}
 	
 	function triggerClick(element) {
@@ -755,22 +780,60 @@
 	}
 
 	function createMenuItem(name, pageHref, index) {
+		// <p><a href="home.html">Home</a></p>
 		var p = document.createElement('p');
+		var a = document.createElement('a');
 
-		if (index == apiDetails.index) {
-			// <p class="disabled">Option 1</p>
-			p.innerHTML = name;
-			p.className = "disabled";
+		a.id = 'menu-item-' + index;
+		if (index == apiDetails.supports.length) {
+			a.href = "#";
+			a.onclick = function() {
+				showPopupLogin();	
+			};
 		} else {
-			// <p><a href="home.html">Home</a></p>
-			var a = document.createElement('a');
-
 			a.href = "javascript:init(" + index + ")";
-			a.innerHTML = name;
-			p.appendChild(a);
 		}
+		a.innerHTML = name;
+		p.appendChild(a);
 
 		return p;
+	}
+
+	function updateMenuItems() {
+		var a;
+
+		// Home
+		a = document.getElementById('menu-item--1');
+		if (apiDetails.index == -1) {
+			a.className = 'disable-link';
+		} else {
+			a.className = '';
+		}
+
+		// Options
+		var i = 0;
+		var btn;
+
+		for (; i < apiDetails.supports.length; ++i) {
+			a = document.getElementById('menu-item-' + i);
+			if (loggedIn == null || i == apiDetails.index) {
+				a.className = 'disable-link-button';
+			} else {
+				a.className = '';
+			}
+			btn = document.getElementById('card-btn-' + i);
+			if (btn != null) {
+				btn.className = a.className;
+			}
+		}
+		
+		// Login
+		a = document.getElementById('menu-item-' + i);
+		if (loggedIn == null) {
+			a.innerHTML = 'Login';
+		} else {
+			a.innerHTML = 'Logout';
+		}
 	}
 
 	function buildCard(i) {
@@ -794,6 +857,7 @@
 		div = document.createElement('div');
 		div.className = "cardFooter";
 		button = document.createElement('button');
+		button.id = 'card-btn-' + i;
 		button.type = "button";
 		button.innerHTML = apiDetails.supports[i].name;
 		button.onclick = function() {init(i);};
@@ -808,6 +872,26 @@
 	function showPopupMsg(title, msg) {
 		document.getElementById('popupTitle').innerHTML = title;
 		document.getElementById('popupMsg').innerHTML = msg;
-//		document.getElementById('main').style.display = 'none';
 		document.getElementById('allpopup').style.display = 'block';
+	}
+
+	var loginIndex = 0;
+
+	function showPopupLogin() {
+		const a = document.getElementById('menu-item-' + apiDetails.supports.length);
+
+		if (a.innerHTML == 'Logout') {
+			loginIndex = 1;
+			loggedIn = null;
+			if (apiDetails.index != -1) {
+				// Move to home
+				init(-1);
+			} else {
+				updateMenuItems();
+			}
+		} else if (loginIndex == 1) {
+			loginIndex = 0;
+		} else {
+			document.getElementById('allpopupLogin').style.display = 'block';
+		}
 	}
