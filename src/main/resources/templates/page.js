@@ -817,13 +817,13 @@
 		for (; i < apiDetails.supports.length; ++i) {
 			a = document.getElementById('menu-item-' + i);
 			if (loggedIn == null || i == apiDetails.index) {
-				a.className = 'disable-link-button';
+				a.className = 'disable-link';
 			} else {
 				a.className = '';
 			}
 			btn = document.getElementById('card-btn-' + i);
 			if (btn != null) {
-				btn.className = a.className;
+				btn.className = a.className + '-button';
 			}
 		}
 		
