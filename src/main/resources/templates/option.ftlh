@@ -109,11 +109,13 @@
         	</div>
     	</div>
 
-		<div id="popup" class="popup">
-			<button id="popupClose">x</button>
-			<h2 id="popupTitle"></h2>
-			<p id="popupMsg">Test here...</p>
-			<a id="popupAClose" href="#">Close</a>
+		<div id="allpopup" class="allpopup">
+			<div id="popup" class="popup">
+				<button id="popupClose">x</button>
+				<h2 id="popupTitle"></h2>
+				<p id="popupMsg">Test here...</p>
+				<a id="popupAClose" href="#">Close</a>
+			</div>
 		</div>
 
 		<script type="text/javascript">

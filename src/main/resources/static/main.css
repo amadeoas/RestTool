@@ -13,6 +13,16 @@ body {
 	margin: 0;
 }
 
+.allpopup {
+	background-color: rgba(0,0,0,.5);
+	width: 100%;
+	height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
 .popup {
     background-color: #ffffff;
     width: 420px;
@@ -20,12 +30,12 @@ body {
     position: absolute;
     transform: translate(-50%,-50%);
     left: 50%;
-    top: 50%;
+    top: 40%;
     border-radius: 8px;
     border-left: solid 1px gray;
 	border-top: solid 1px gray;
 	box-shadow: 0 6px 10px 0 rgba(0,0,0,0.2);
-    display: none;
+    display: block;
     font-family: “Poppins”,sans-serif;
     text-align: center;
     color: #006;
@@ -63,11 +73,9 @@ body {
     position: relative;
     margin: 10px auto;
     text-align: center;
-    border-radius: 20px;
     background-color: #ffffff;
 	border-radius: 4px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    color: #006;
     text-decoration: none;
     padding: 8px 0;
 }

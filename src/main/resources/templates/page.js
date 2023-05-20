@@ -36,11 +36,6 @@
 	function init(index) {
 		buildMenu(index);
 
-//		if (firstTime) {
-//			firstTime = false;
-//			initialiseClose();
-//		}
-
 		if (index == -1) {
 			// Home page
 			const cards = document.getElementById("cards");
@@ -206,7 +201,7 @@
 			method.value = func.method;
 			info = func.info;
 			if (typeof info != 'undefined') {
-				var title = 'Information on ' + method.value + ': &lt;route&gt;' + func.query;
+				var title = 'Information on ' + method.value + ': &lt;route&gt;/' + func.query;
 
 				document.getElementById('info').title = info;
 				document.getElementById('info').onclick = function() {
@@ -435,7 +430,7 @@
 	}
 
 	function addInfo(div, title, msg) {
-		if (typeof title == 'undefined') {
+		if (typeof msg == 'undefined') {
 			return;
 		}
 
@@ -451,7 +446,7 @@
 		info.appendChild(img);
 
 		info.onclick = function() {
-			showPopupMsg("Information for field " + title, msg);	
+			showPopupMsg('Information for field ' + title, msg);	
 		};
 		div.appendChild(info);
 	}
@@ -550,8 +545,8 @@
 	}
 	
 	function closePopUp() {
-		document.getElementById('main').style.display = 'flex';
-		document.getElementById('popup').style.display = 'none';
+//		document.getElementById('main').style.display = 'flex';
+		document.getElementById('allpopup').style.display = 'none';
 	}
 	
 	function triggerClick(element) {
@@ -813,6 +808,6 @@
 	function showPopupMsg(title, msg) {
 		document.getElementById('popupTitle').innerHTML = title;
 		document.getElementById('popupMsg').innerHTML = msg;
-		document.getElementById('main').style.display = 'none';
-		document.getElementById('popup').style.display = 'block';
+//		document.getElementById('main').style.display = 'none';
+		document.getElementById('allpopup').style.display = 'block';
 	}
