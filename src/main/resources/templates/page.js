@@ -17,8 +17,15 @@
 	const baseTabNames = ["header", "params", "body"];
 	const httpStatus = {"405": ["Method Not Allowed (405)", "The HyperText Transfer Protocol (HTTP) 405 Method Not Allowed response status code indicates that the server knows the request method, but the target resource doesn't support this method."]};
 	var apiDetails = new HttpAllSupportsIndex(${data}, ${index});
-	var firstTime = true;
 
+
+	window.addEventListener("load", function() {
+		setTimeout(
+			function open() {
+				initialiseClose();
+			}, 1500 
+		)
+	});
 
 	function init(index, err) {
 		apiDetails.error = err; 
@@ -29,10 +36,10 @@
 	function init(index) {
 		buildMenu(index);
 
-		if (firstTime) {
-			firstTime = false;
-			initialiseClose();
-		}
+//		if (firstTime) {
+//			firstTime = false;
+//			initialiseClose();
+//		}
 
 		if (index == -1) {
 			// Home page
@@ -190,12 +197,22 @@
 		if (index != apiDetails.supports[apiDetails.index].funcIndex) {
 			console.log("Updating host by event with index " + index + "...");
 
+			const func = apiDetails.supports[apiDetails.index].funcs[index];
 			const method = document.getElementById('method');
 			let numValidTabs = 0;
+			var info;
 
 			apiDetails.supports[apiDetails.index].funcIndex = index;
-			method.value = apiDetails.supports[apiDetails.index].funcs[index].method;
-			document.getElementById('info').title = apiDetails.supports[apiDetails.index].funcs[index].info;
+			method.value = func.method;
+			info = func.info;
+			if (typeof info != 'undefined') {
+				var title = 'Information on ' + method.value + ': &lt;route&gt;' + func.query;
+
+				document.getElementById('info').title = info;
+				document.getElementById('info').onclick = function() {
+					showPopupMsg(title, info);	
+				};
+			}
 
 			if (buildRequestHeader()) {
 				numValidTabs++;
@@ -400,7 +417,7 @@
 				info = concatenate(info, length, "Pattern", viewData.pattern);
 			}
 		}
-		addInfo(cell, info);
+		addInfo(cell, viewData.name, info);
 		div.appendChild(cell);
 	
 		return div;
@@ -417,7 +434,7 @@
 		return txt;
 	}
 
-	function addInfo(div, title) {
+	function addInfo(div, title, msg) {
 		if (typeof title == 'undefined') {
 			return;
 		}
@@ -430,9 +447,12 @@
 
 		img.src = "images/info-icon.png";
 		img.height = 20;
-		img.title = title;
+		img.title = msg;
 		info.appendChild(img);
 
+		info.onclick = function() {
+			showPopupMsg("Information for field " + title, msg);	
+		};
 		div.appendChild(info);
 	}
 
@@ -520,6 +540,18 @@
 				});
 		  	});
 		});
+
+		document.getElementById('popupClose').addEventListener('click', function() {
+			closePopUp();
+		});
+		document.getElementById('popupAClose').addEventListener('click', function() {
+			closePopUp();
+		});
+	}
+	
+	function closePopUp() {
+		document.getElementById('main').style.display = 'flex';
+		document.getElementById('popup').style.display = 'none';
 	}
 	
 	function triggerClick(element) {
@@ -776,4 +808,11 @@
 		li.appendChild(card);
 
 		return li;
+	}
+
+	function showPopupMsg(title, msg) {
+		document.getElementById('popupTitle').innerHTML = title;
+		document.getElementById('popupMsg').innerHTML = msg;
+		document.getElementById('main').style.display = 'none';
+		document.getElementById('popup').style.display = 'block';
 	}

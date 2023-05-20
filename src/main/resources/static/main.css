@@ -13,6 +13,65 @@ body {
 	margin: 0;
 }
 
+.popup {
+    background-color: #ffffff;
+    width: 420px;
+    padding: 20px 30px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 8px;
+    border-left: solid 1px gray;
+	border-top: solid 1px gray;
+	box-shadow: 0 6px 10px 0 rgba(0,0,0,0.2);
+    display: none;
+    font-family: “Poppins”,sans-serif;
+    text-align: center;
+    color: #006;
+}
+
+.popup button {
+    display: block;
+    margin:  0 0 25px auto;
+    background-color: transparent;
+    font-size: 15px;
+    color: #006;
+    border-radius: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    width: 30px;
+    height: 30px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.popup h2 {
+   margin-top: -20px;
+}
+
+.popup p {
+    font-size: 14px;
+    text-align: justify;
+    margin: 20px 0;
+    line-height: 25px;
+}
+
+.popup a {
+    display: block;
+    width: 150px;
+    position: relative;
+    margin: 10px auto;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #ffffff;
+	border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    color: #006;
+    text-decoration: none;
+    padding: 8px 0;
+}
+
 .button {
 	margin: 4px 4px 4px 4px;
 	padding-left: 2px;

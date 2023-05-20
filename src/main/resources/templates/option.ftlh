@@ -109,6 +109,13 @@
         	</div>
     	</div>
 
+		<div id="popup" class="popup">
+			<button id="popupClose">x</button>
+			<h2 id="popupTitle"></h2>
+			<p id="popupMsg">Test here...</p>
+			<a id="popupAClose" href="#">Close</a>
+		</div>
+
 		<script type="text/javascript">
 			<#include "page.js" />
 		</script>
