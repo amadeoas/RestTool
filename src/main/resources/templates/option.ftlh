@@ -117,18 +117,18 @@
 				<h2 id="popupLoginTitle">Log In</h2>
 				<p>Introduce one of the user 'aa' or 'bb' with the password 'password' to get access at 
 				different options.</p>
-				<form>
+				<form id="formLogin">
 					<table>
 						<tr class="header-field">
 							<td><lable>Username:</label></td>
 							<td><input id="username" type="TEXT" required pattern="^[a-zA-Z_\-\d]{2,20}$"></td>
-						</t>
+						</tr>
 						<tr class="header-field">
-							<td><lable>Username:</label></td>
+							<td><lable>Password:</label></td>
 							<td><input id="name" type="PASSWORD" required pattern="^[a-zA-Z_\-\\d]{8,20}$"></td>
 						</tr>
 					</table>
-					<a id="popupLoginSubmit" href="#">Submit</a>
+					<button id="popupLoginSubmit" class="button" form="formLogin" onClick="submitLogin">Submit</button>
 				</form>
 			</div>
 		</div>

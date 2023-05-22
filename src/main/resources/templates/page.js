@@ -543,20 +543,7 @@
 			updateMenuItems();
 		});
 		document.getElementById('popupLoginSubmit').addEventListener('click', function() {
-			// TODO: disable login, send request, and then update from response
-			closeLoginPopUp();
-			// Un-disable options
-			const time = (1 * 1 * 60 * 1000);
-
-			loggedIn = new Object();
-			loggedIn.expires = new Date().getTime() + time;
-			loggedIn.timeout = setTimeout(() => {
-					console.log("Time out the Logged in!");
-					showPopupLogin();
-				}, time
-			);
-			loggedIn.token = '';
-			updateMenuItems();
+			submitLogin();
 		});
 		document.getElementById('popupClose').addEventListener('click', function() {
 			closeMsgPopUp();
@@ -564,6 +551,23 @@
 		document.getElementById('popupAClose').addEventListener('click', function() {
 			closeMsgPopUp();
 		});
+	}
+	
+	function submitLogin() {
+		// TODO: disable login, send request, and then update from response
+		closeLoginPopUp();
+		// Un-disable options
+		const time = (1 * 1 * 60 * 1000);
+
+		loggedIn = new Object();
+		loggedIn.expires = new Date().getTime() + time;
+		loggedIn.timeout = setTimeout(() => {
+				console.log("Time out the Logged in!");
+				showPopupLogin();
+			}, time
+		);
+		loggedIn.token = '';
+		updateMenuItems();
 	}
 	
 	function closeMsgPopUp() {
