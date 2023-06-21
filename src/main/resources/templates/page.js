@@ -326,7 +326,7 @@
 		var name = viewData.path + '[' + numItems + ']';
 
 		console.log('Building ' + name + ' view...');
-		div.id = name;
+		div.id = 'entry-' + name;
 		if (items.length == 1) {
 			table.appendChild(buildInput(name, items[0], 0, (numItems > viewData.min) ? numItems : undefined));
 		} else {
@@ -382,6 +382,8 @@
 				+ ", required: " + viewData.required
 				+ ", readOnly: " + viewData.readOnly);
 
+		var div = document.createElement('tr');
+		var cell = document.createElement('td');
 		let info;
 
 		if (viewData.type == "ARRAY") {
@@ -422,15 +424,17 @@
 			addInfo(summary, viewData.name, info, indexButton);			
 			details.appendChild(summary);
 
+			cell.colSpan = 2;
+			cell.appendChild(details);
+			div.appendChild(cell);
+
 			for (var index = 0; index < viewData.min; index++) {
 				arrayEntry(details, viewData);
 			}
 
-			return details;
+			return div;
 		}
 
-		var div = document.createElement('tr');
-		var cell = document.createElement('td');
 		var label = document.createElement('label');
 
 		label.innerHTML = viewData.name + (typeof index == 'undefined' ? "" : " " + (index + 1)) + ":";
@@ -521,7 +525,7 @@
 				info = concatenate(info, length, "Pattern", viewData.pattern);
 			}
 		}
-		addInfo(cell, viewData.name, info, indexButton);
+		addInfo(cell, viewData.name, info, indexButton, secName);
 		div.appendChild(cell);
 	
 		return div;
@@ -538,7 +542,7 @@
 		return txt;
 	}
 
-	function addInfo(div, title, msg, indexButton) {
+	function addInfo(div, title, msg, indexButton, secName) {
 		if (typeof msg == 'undefined') {
 			return;
 		}
@@ -560,7 +564,7 @@
 		div.appendChild(info);
 
 		if (typeof indexButton != 'undefined' && indexButton > 0) {
-			div.appendChild(buildRemoveBtn(div.id));
+			div.appendChild(buildRemoveBtn('entry-' + secName));
 		}
 	}
 
@@ -568,13 +572,9 @@
 		console.log('Removing ' + id + '...');
 
 		let rmv = document.getElementById(id);
+		let parent = rmv.parentNode;
 
-		rmv.parentElemnt.removeChild(rmv);
-		if (details.childElementCount < viewData.max) {
-			var pluss = document.getElementById(details.id + '+');
-
-			pluss.disabled = false;
-		}
+		parent.removeChild(rmv);
 		console.log(id + ' was removed');
 	}
 
