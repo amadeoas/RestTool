@@ -7,8 +7,8 @@ package co.uk.bocaditos.resttool.model;
  * @author aasco
  */
 public enum HttpInputType {
-	BUTTON,
-	CHECKBOX,
+	ARRAY,
+	BOOLEAN, // CHECKBOX,
 	COLOR,
 	DATE,
 	DATETIME_LOCAL,
@@ -21,9 +21,6 @@ public enum HttpInputType {
 	PASSWORD,
 	RADIO,
 	RANGE,
-	RESET,
-	SEARCH,
-	SUBMIT,
 	TEL,
 	TEXT,
 	URL,

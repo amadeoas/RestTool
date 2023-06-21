@@ -121,14 +121,14 @@
 					<table>
 						<tr class="header-field">
 							<td><lable>Username:</label></td>
-							<td><input id="username" type="TEXT" required pattern="^[a-zA-Z_\-\d]{2,20}$"></td>
+							<td><input name="username" id="username" type="TEXT" required pattern="^[a-zA-Z_\-\d]{2,20}$"></td>
 						</tr>
 						<tr class="header-field">
 							<td><lable>Password:</label></td>
-							<td><input id="name" type="PASSWORD" required pattern="^[a-zA-Z_\-\\d]{8,20}$"></td>
+							<td><input name="pass" id="pass" type="PASSWORD" required pattern="^[a-zA-Z_\-\\d]{8,20}$"></td>
 						</tr>
 					</table>
-					<button id="popupLoginSubmit" class="button" form="formLogin" onClick="submitLogin">Submit</button>
+					<button type="button" id="popupLoginSubmit" class="button" form="formLogin" onClick="submitLogin">Submit</button>
 				</form>
 			</div>
 		</div>

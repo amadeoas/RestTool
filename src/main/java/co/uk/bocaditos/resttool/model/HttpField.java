@@ -1,6 +1,9 @@
 package co.uk.bocaditos.resttool.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 /**
  * Representation of a field.
@@ -29,12 +32,14 @@ public class HttpField {
 	private boolean disabled;
 	@JsonProperty(value="info", required=false)
 	private String info;
+	@JsonProperty(value="items", required=false)
+	private List<HttpField> items;
 	@JsonProperty(value="error", required=false)
 	private String error;
 
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -50,7 +55,7 @@ public class HttpField {
 	}
 
 	public String getPath() {
-		return path;
+		return this.path;
 	}
 
 	public void setPath(String path) {
@@ -58,7 +63,7 @@ public class HttpField {
 	}
 
 	public HttpInputType getType() {
-		return type;
+		return this.type;
 	}
 
 	public void setType(HttpInputType type) {
@@ -66,7 +71,7 @@ public class HttpField {
 	}
 
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 
 	public void setValue(String value) {
@@ -74,7 +79,7 @@ public class HttpField {
 	}
 
 	public String getPattern() {
-		return pattern;
+		return this.pattern;
 	}
 
 	public void setPattern(String pattern) {
@@ -98,7 +103,7 @@ public class HttpField {
 	}
 
 	public String getError() {
-		return error;
+		return this.error;
 	}
 
 	public void setError(String error) {
@@ -106,7 +111,7 @@ public class HttpField {
 	}
 
 	public boolean isRequired() {
-		return required;
+		return this.required;
 	}
 
 	public void setRequired(boolean required) {
@@ -114,11 +119,24 @@ public class HttpField {
 	}
 
 	public boolean isDisabled() {
-		return disabled;
+		return this.disabled;
 	}
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public List<HttpField> getItems() {
+		return this.items;
+	}
+
+	public void setItems(List<HttpField> items) throws ViewModelException {
+		if (HttpInputType.ARRAY != this.type) {
+			throw new ViewModelException("Invalid type {0} when it should be ARRAY as it has ithems", 
+					this.type);
+		}
+
+		this.items = items;
 	}
 
 } // HttpField

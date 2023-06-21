@@ -39,8 +39,8 @@
 			"name": "User", 
 			"type": "TEXT", 
 			"pattern": "^[a-zA-Z\\d]{1,20}$", 
-			"minLength": 1, 
-			"maxLength": 20, 
+			"min": 1, 
+			"max": 20, 
 			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
 		}], 
 		"body": [{
@@ -49,8 +49,8 @@
 			"type": "TEXT", 
 			"required": true, 
 			"pattern": "^[a-zA-Z ]{1,20}$", 
-			"minLength": 1, 
-			"maxLength": 20, 
+			"min": 1, 
+			"max": 20, 
 			"info": "Customer's firstname, which it's required. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'.", 
 			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
 		}, {
@@ -59,8 +59,8 @@
 			"type": "TEXT", 
 			"required": true, 
 			"pattern": "^[a-zA-Z ]{1,20}$", 
-			"minLength": 1, 
-			"maxLength": 20, 
+			"min": 1, 
+			"max": 20, 
 			"info": "Customer's surname, which it's required. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'.", 
 			"error": "Invalid values. Value must be a text between 1 to 20 characters of 'a' to 'z' and 'A' to 'Z'."
 		}, {
@@ -69,6 +69,21 @@
 			"required": true, 
 			"info": "Custmer's date of birth, which it's required.", 
 			"error": "Invalid date of birth values."
+		}, {
+			"name": "Address", 
+			"path": "addrLines",
+			"type": "ARRAY", 
+			"required": false, 
+			"items": [{
+				"name": "Line",
+				"path": "addrLines",
+				"type": "TEXT",
+				"required": false,
+				"pattern": "^[a-zA-Z ]{1,20}$"
+			}],
+			"min": 1,
+			"max": 8,
+			"info": "Custmer's address lines, which it isn't required."
 		}], 
 		"params": [
 		]

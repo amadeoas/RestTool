@@ -258,7 +258,7 @@
 
 		console.log("Building " + secName + " request tab view...");
 		for (var i = 0; i < viewDatas.length; i++) {
-			table.appendChild(buildInput(secName, viewDatas[i], i));
+			table.appendChild(buildInput(secName, viewDatas[i], undefined));
 		}
 		section.appendChild(table);
 		console.log(secName + " request tab view was built");
@@ -310,19 +310,130 @@
 
 		return true;
 	}
+	
+	function arrayEntry(details, viewData) {
+		const numItems = details.childElementCount;
 
-	function buildInput(secName, viewData, index) {
+		if (typeof viewData.max != 'undefined' && numItems >= viewData.max) {
+			sendError('No more can be added');
+
+			return;
+		}
+
+		const items = viewData.items;
+		var div = document.createElement('div');
+		var table = document.createElement('table');
+		var name = viewData.path + '[' + numItems + ']';
+
+		console.log('Building ' + name + ' view...');
+		div.id = name;
+		if (items.length == 1) {
+			table.appendChild(buildInput(name, items[0], 0, (numItems > viewData.min) ? numItems : undefined));
+		} else {
+			// 
+			var fieldset = document.createElement('fieldset');
+			var legent = document.createElement('legend');
+			var span = document.createElement('span');
+
+			fieldset.appendChild(legent);
+			span.innerHTML = viewData.name + ' ' + numItems + ' ';
+			legent.appendChild(span);
+			if (numItems > viewData.min) {
+				// Add remove button, i.e. '-'
+				legent.appendChild(buildRemoveBtn(name));
+			}
+
+			var table1 = document.createElement('table');
+
+			for (var i = 0; i < items.length; i++) {
+				table1.appendChild(buildInput(name, items[i], undefined));
+			}
+			fieldset.appendChild(appendChild);
+			table.appendChild(fieldset);
+		}
+		div.appendChild(table);
+		console.log(name + ' view was built');
+
+		details.appendChild(div);
+		if (typeof viewData.max != 'undefined' && (numItems +1) >= viewData.max) {
+			// Disable adding new indtances
+			var pluss = document.getElementById(details.id + '+');
+
+			pluss.disabled = true;
+		}
+	}
+	
+	function buildRemoveBtn(id) {
+		var btn = document.createElement('button');
+
+		btn.className = "remove";
+		btn.type = "button";
+		btn.innerHTML = '-';
+		btn.onclick = function() {
+			remove(id);	
+		};
+
+		return btn;
+	}
+
+	function buildInput(secName, viewData, index, indexButton) {
 		console.log("ViewData: {name: " + viewData.name + ", value: " + viewData.value 
 				+ ", placeholder: " + viewData.placeholder 
 				+ ", required: " + viewData.required
 				+ ", readOnly: " + viewData.readOnly);
 
+		let info;
+
+		if (viewData.type == "ARRAY") {
+			// Create expandable
+			var details = document.createElement('details');
+
+			details.id = viewData.path;
+			if (typeof viewData.required != 'undefined' && viewData.required) {
+				details.setAttribute("open", "");
+			}
+			
+			var summary = document.createElement('summary');
+			var field;
+
+			field = document.createElement('span');
+			field.innerHTML =  viewData.name + ' (<span class="array-size">from ' + viewData.min + ' to ' + viewData.max + '</span>)';
+			summary.appendChild(field);
+			field= document.createElement('button');
+			field.id = viewData.path + '+';
+			field.className = 'add';
+			field.innerHTML = '+';
+			field.onclick = function() {
+				arrayEntry(details, viewData);
+			};
+			summary.appendChild(field);
+			if (typeof viewData.min != 'undefined') {
+				info = "Min. length " + viewData.min;
+			}
+			if (typeof viewData.max != 'undefined') {
+				if (typeof viewData.info != 'undefined') {
+					info += ', and ';
+				}
+				info += "Max. length " + viewData.max;
+			}
+			if (typeof viewData.info != 'undefined') {
+				info = viewData.info + '\n\n' + info;
+			}
+			addInfo(summary, viewData.name, info, indexButton);			
+			details.appendChild(summary);
+
+			for (var index = 0; index < viewData.min; index++) {
+				arrayEntry(details, viewData);
+			}
+
+			return details;
+		}
+
 		var div = document.createElement('tr');
 		var cell = document.createElement('td');
 		var label = document.createElement('label');
-		var span = document.createElement('span');
 
-		label.innerHTML = viewData.name + ":";
+		label.innerHTML = viewData.name + (typeof index == 'undefined' ? "" : " " + (index + 1)) + ":";
 		div.className = "header-field";
 		cell.appendChild(label);
 		div.appendChild(cell);
@@ -381,8 +492,6 @@
 		}
 		cell.appendChild(input);
 
-		let info;
-
 		if (typeof viewData.info != 'undefined') {
 			info = viewData.info;
 		} else if (viewData.type != 'hidden' && (typeof viewData.disabled == 'undefined' 
@@ -412,7 +521,7 @@
 				info = concatenate(info, length, "Pattern", viewData.pattern);
 			}
 		}
-		addInfo(cell, viewData.name, info);
+		addInfo(cell, viewData.name, info, indexButton);
 		div.appendChild(cell);
 	
 		return div;
@@ -429,7 +538,7 @@
 		return txt;
 	}
 
-	function addInfo(div, title, msg) {
+	function addInfo(div, title, msg, indexButton) {
 		if (typeof msg == 'undefined') {
 			return;
 		}
@@ -449,6 +558,24 @@
 			showPopupMsg('Information for field ' + title, msg);	
 		};
 		div.appendChild(info);
+
+		if (typeof indexButton != 'undefined' && indexButton > 0) {
+			div.appendChild(buildRemoveBtn(div.id));
+		}
+	}
+
+	function remove(id) {
+		console.log('Removing ' + id + '...');
+
+		let rmv = document.getElementById(id);
+
+		rmv.parentElemnt.removeChild(rmv);
+		if (details.childElementCount < viewData.max) {
+			var pluss = document.getElementById(details.id + '+');
+
+			pluss.disabled = false;
+		}
+		console.log(id + ' was removed');
 	}
 
 	function sendForm() {
@@ -557,7 +684,7 @@
 		// TODO: disable login, send request, and then update from response
 		closeLoginPopUp();
 		// Un-disable options
-		const time = (1 * 1 * 60 * 1000);
+		const time = (1 * 10 * 60 * 1000);
 
 		loggedIn = new Object();
 		loggedIn.expires = new Date().getTime() + time;
@@ -908,4 +1035,8 @@
 		} else {
 			document.getElementById('allpopupLogin').style.display = 'block';
 		}
+	}
+	
+	function sendError(msg) {
+		console.log('Error: ' + msg);
 	}
