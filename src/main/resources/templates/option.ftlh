@@ -113,9 +113,12 @@
 
 		<div id="allpopupLogin" class="allpopup">
 			<div id="popupLogin" class="popup">
-				<button id="popupLoginClose">x</button>
-				<h2 id="popupLoginTitle">Log In</h2>
-				<p>Introduce one of the user 'aa' or 'bb' with the password 'password' to get access at 
+				<div>
+					<span id="popupLoginTitle" class="loginTitle">Log In</span>
+					<span><button id="popupLoginClose">x</button></span>
+				</div>
+				<hr />
+				<p>Introduce one of the users 'aa' or 'bb' with the password 'password' to get access at 
 				different options.</p>
 				<form>
 					<table>
@@ -124,10 +127,11 @@
 							<td><input id="username" type="TEXT" required pattern="^[a-zA-Z_\-\d]{2,20}$"></td>
 						</t>
 						<tr class="header-field">
-							<td><lable>Username:</label></td>
+							<td><lable>Password:</label></td>
 							<td><input id="name" type="PASSWORD" required pattern="^[a-zA-Z_\-\\d]{8,20}$"></td>
 						</tr>
 					</table>
+					<hr />
 					<a id="popupLoginSubmit" href="#">Submit</a>
 				</form>
 			</div>
