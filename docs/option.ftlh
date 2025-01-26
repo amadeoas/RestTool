@@ -26,18 +26,18 @@
         		</div>
         	</header>
         	<article id="contentBody" class="main">
-					<div name="flowView" id="flowView">
-						<div name="showView" id="showView">
-						</div>
-						<div name="tooltip" id="tooltip" hidden>
-							...
-						</div>
+				<div name="flowView" id="flowView">
+					<div name="showView" id="showView">
 					</div>
+					<div name="tooltip" id="tooltip" hidden>
+						...
+					</div>
+				</div>
        			<div name="errorView" id="errorView" hidden>
        			</div>
            	</article>
         	<footer class="footer">
-	        	<hr  style="border: 1;color: lightgray;" />
+	        	<hr style="border: 1;color: lightgray;" />
 	        	<div id="footer">
 	    		</div>
         	</footer>

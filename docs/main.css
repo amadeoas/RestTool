@@ -282,12 +282,16 @@ div#contentTitle {
 	overflow-y: auto;
 }
 #opac {
-	position: absolute;
-	width: 100vh;
-	height: 100vh;
+	position: fixed;
 	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	opacity: 0.95;
 	background-color: #f1f1f1;
+}
+#msgsView {
+	margin: 6px 2px 6px 2px;
 }
 
 #tooltip {

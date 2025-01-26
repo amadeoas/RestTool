@@ -13,7 +13,6 @@ document.getElementById("filesForm").addEventListener("submit", readFiles);
 
 function init_() {
 	optionsView = document.getElementById("optionsView");
-	homeView = document.getElementById("homeView");
 	showView = document.getElementById("showView");
 	btnFiles = document.getElementById("btnFiles");
 	footer = document.getElementById("footer");
@@ -128,13 +127,6 @@ async function updateFiles() {
 function processFiles() {
 	info("Starting the load of files...");
 
-	var element;
-
-	element = document.getElementById("showViewFrom");
-	element.innerHTML = filesData.from;
-	element = document.getElementById("showViewTo");
-	element.innerHTML = filesData.to;
-	showView.innerHTML = "";
 	filesData.noError = true;
 	filesData.contents = [];
 	for (var i = 0 ; i < filesData.files.length; ++i) {
@@ -189,12 +181,7 @@ function processFiles() {
 				info("Loaded file \"" + filesData.files[this.index].name + "\"");
 			};
 			reader.readAsText(file);
-
-			var li = document.createElement("li");
-
-			li.appendChild(document.createTextNode(file.name));
-			showView.appendChild(li);
-
+			filesData.contents[reader.index] = reader.result;
 			++filesData.numValidFiles;
 		}
 	}
@@ -236,12 +223,6 @@ async function readFiles(event) {
 	element = document.getElementById("toDate");
 	filesData.to = element.value + ".000Z"; // yyyyMMdd HH:mm:ss
 	fileList.innerHTML = ""; // clear previous file list
-
-	element = document.getElementById("showViewFrom");
-	element.innerHTML = filesData.from.replace("T", " ");
-	element = document.getElementById("showViewTo");
-	element.innerHTML = filesData.to.replace("T", " ");
-	showLogs(true);
 
 	info("Reading of files was prepared");
 	processFiles();
@@ -550,23 +531,22 @@ function showShowView(event) {
 function showTooltip(event) {
 	hideTooltip();
 
-	var div = document.getElementById('flowView');
-	var top  = (event.clientY - div.getBoundingClientRect().top)  + 'px';
+//	var div = document.getElementById('flowView');
+	var top  = event.clientY  + 'px';
 	var divId = event.currentTarget.id;
 	var app = getApp(divId);
 	var logsMsg = getLogsMsg(divId);
 	var tooltip = getTooltip();
 	var arrow = document.getElementById('arrw-' + divId);
 
-	tooltip.style.left = appRight(event.currentTarget);
+	tooltip.style.left = appRight(divId);
 	tooltip.style.top = top;
 	tooltip.innerHTML = '<p>App Name: ' + app.name + '</p>'
 		+ '<p>Type: ' + logsMsg.type + '</p>'
 		+ '<p>From: ' + logsMsg.from + '</p>'
 		+ '<p>To: ' + logsMsg.to + '</p>';
 	var bound = tooltip.getBoundingClientRect();
-	var flowBound = div.getBoundingClientRect();
-	
+
 	if (bound.width + parseInt(tooltip.style.left) > W) {
 		tooltip.style.left = (parseInt(tooltip.style.left) - (bound.width + parseInt(event.currentTarget.style.width))) + 'px';
 	}
@@ -581,9 +561,12 @@ function showTooltip(event) {
 	return false;
 }
 
-function appRight(rect) {
-	var i = parseInt(rect.parentElement.style.left) 
-		+ parseInt(rect.parentElement.style.width);
+function appRight(logsMsgId) {
+	var view = document.getElementById('flowView');
+	var appId = getAppId(logsMsgId);
+	var app = document.getElementById(appId);
+	var i = parseInt(view.style.left) + parseInt(app.style.left) 
+		+ parseInt(app.style.width);
 
 	return i + "px";
 }
@@ -596,7 +579,7 @@ function hideTooltip(event) {
 		var arrow = document.getElementById('arrw-' + divId);
 
 		if (arrow != undefined) {
-arrow.style['border-bottom-width'] = '1px';
+			arrow.style['border-bottom-width'] = '1px';
 		}
 	}
 
@@ -617,19 +600,24 @@ function hideShowView() {
 	return false;
 }
 
-function getApp(id) {
-	var offset = id.indexOf(':');
-	var appName = (offset == -1) ? logsMsgId : id.substring(0, offset);
+function getApp(logsMsgId) {
+	var appName = getAppId(logsMsgId);
 
 	for (var appIndex = 0; appIndex < logs.apps.length; ++appIndex) {
 		var app = logs.apps[appIndex];
 
 		if (app.name == appName) {
-return app;
+			return app;
 		}
 	}
 
 	return null;
+}
+
+function getAppId(lodsMsgId) {
+	var offset = lodsMsgId.indexOf(':');
+
+	return (offset == -1) ? logsMsgId : lodsMsgId.substring(0, offset);	
 }
 
 function getLogsMsg(logsMsgId) {
