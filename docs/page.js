@@ -3,7 +3,7 @@ var data = null;
 var filesData = null;
 var optionsView;
 var homeView;
-var showView;
+var showView = null;
 var btnFiles;
 var footer;
 var errorView;
@@ -13,7 +13,6 @@ document.getElementById("filesForm").addEventListener("submit", readFiles);
 
 function init_() {
 	optionsView = document.getElementById("optionsView");
-	showView = document.getElementById("showView");
 	btnFiles = document.getElementById("btnFiles");
 	footer = document.getElementById("footer");
 
@@ -119,6 +118,7 @@ async function updateFiles() {
 		// Present logs
 		info("Loaded files were processed");
 	}
+	stopProgress();
 
 	filesData = null;
 	enableForm(true);
@@ -127,6 +127,7 @@ async function updateFiles() {
 function processFiles() {
 	info("Starting the load of files...");
 
+	startProgress('Loading files...');
 	filesData.noError = true;
 	filesData.contents = [];
 	for (var i = 0 ; i < filesData.files.length; ++i) {
@@ -190,6 +191,7 @@ function processFiles() {
 		// Not all log files were load
 		info("Nothing to load");
 		showLogs(false);
+		stopProgress();
 	} else {
 		info("Load of files was started");
 		showLogs(true);
@@ -206,7 +208,7 @@ async function readFiles(event) {
 		return;
 	}
 
-	info("Preparing reading of files...");
+	startProgress("Preparing reading of files...");
 	enableForm(false);
 
 	var fileList = document.getElementById("fileInput");
@@ -255,6 +257,9 @@ const SEND_REQUEST  = '${sendReques}';
 const SEND_RESPONSE = '${sendResponse}';
 var logs = ${logs};
 var heightSize;
+var opac = null;
+var progressBar;
+var pTxt;
 
 
 function init() {
@@ -413,89 +418,114 @@ function getTooltip() {
 }
 
 function getShowView() {
-	var showView = document.getElementById('showView');
-
-	if (showView == null) {
-		var opac = document.createElement('div');
-
-		opac.id = 'opac';
-		document.body.appendChild(opac);
-
-		showView = document.createElement('div');
-		showView.id = 'showView';
-		showView.hidden = true;
-
-		showView.setAttribute("class", "callout");
-		showView.dataClosable = true;
-
-		// Top
-		div = document.createElement('div');
-		div.style.width = '100%';
-		div.style.height = '32px';
-		div.id = 'topShowView';
-		elem = document.createElement("span");
-		elem.id = 'showViewTitle';
-		elem.style.fontSize = '14px';
-		elem.innerHTML = 'Logged Messages';
-		div.appendChild(elem);
-		elem = document.createElement("button");
-		elem.id = 'showViewBtnCloseTop';
-		elem.setAttribute("class", "close");
-		elem.type = "button";
-		elem.innerHTML = 'X';
-//		elem.style.float= 'right';
-		elem.classList.add('favorite');
-		elem.classList.add('xstyled');
-		elem.onclick = hideShowView
-		div.appendChild(elem);
-		showView.appendChild(div);
-
-		elem = document.createElement('hr');
-		showView.appendChild(elem);
-
-		div = document.createElement('div');
-		div.id = 'headerView';
-		showView.appendChild(div);
-
-		// Middle
-		div = document.createElement('div');
-		div.id = 'msgsView';
-		showView.appendChild(div);
-
-		// Bottom
-		div = document.createElement('hr');
-		showView.appendChild(div);
-
-		div = document.createElement('div');
-		div.id = 'bottomShowView';
-		elem = document.createElement("button");
-		elem.setAttribute("class", "close");
-		elem.type = "button";
-		elem.innerHTML = 'Close';
-		elem.style.float= 'right';
-		elem.classList.add('favorite');
-		elem.classList.add('styled');
-		elem.onclick = hideShowView
-		elem.id = 'showViewBtnClose';
-		div.appendChild(elem);
-		showView.appendChild(div);
-		opac.appendChild(showView);
+	if (showView != null) {
+		return showView;
 	}
+
+	var elem;
+
+	opac = document.createElement('div');
+	opac.id = 'opac';
+	document.body.appendChild(opac);
+
+	showView = document.createElement('div');
+	showView.id = 'showView';
+	showView.hidden = true;
+
+	showView.setAttribute("class", "callout");
+	showView.dataClosable = true;
+
+	// Top
+	div = document.createElement('div');
+	div.style.width = '100%';
+	div.style.height = '32px';
+	div.id = 'topShowView';
+	elem = document.createElement("span");
+	elem.id = 'showViewTitle';
+	elem.style.fontSize = '14px';
+	elem.innerHTML = 'Logged Messages';
+	div.appendChild(elem);
+	elem = document.createElement("button");
+	elem.id = 'showViewBtnCloseTop';
+	elem.setAttribute("class", "close");
+	elem.type = "button";
+	elem.innerHTML = 'X';
+//	elem.style.float= 'right';
+	elem.classList.add('favorite');
+	elem.classList.add('xstyled');
+	elem.onclick = hideShowView
+	div.appendChild(elem);
+	showView.appendChild(div);
+
+	elem = document.createElement('hr');
+	showView.appendChild(elem);
+
+	div = document.createElement('div');
+	div.id = 'headerView';
+	showView.appendChild(div);
+
+	// Middle
+	div = document.createElement('div');
+	div.id = 'msgsView';
+	showView.appendChild(div);
+
+	// Bottom
+	div = document.createElement('hr');
+	showView.appendChild(div);
+
+	div = document.createElement('div');
+	div.id = 'bottomShowView';
+	elem = document.createElement("button");
+	elem.setAttribute("class", "close");
+	elem.type = "button";
+	elem.innerHTML = 'Close';
+	elem.style.float= 'right';
+	elem.classList.add('favorite');
+	elem.classList.add('styled');
+	elem.onclick = hideShowView
+	elem.id = 'showViewBtnClose';
+	div.appendChild(elem);
+	showView.appendChild(div);
+	opac.appendChild(showView);
+
+	progressBar = document.createElement('div');
+	progressBar.id = 'progress';
+	progressBar.style.display = 'none';
+
+	pTxt = document.createElement('p');
+	pTxt.id = 'pTxt';
+	pTxt.innerHTML = 'Progressing...';
+	progressBar.appendChild(pTxt);
+
+	elem = document.createElement('progress');
+	elem.id = 'pBar';
+	progressBar.appendChild(elem);
+
+	opac.appendChild(progressBar);
 
 	return showView;
 }
 
-function showOpac() {
-	var opac = document.getElementById('opac');
+function startProgress(text) {
+	getShowView();
 
+	pTxt.innerHTML = text;
+	showView.style.display = 'none';
+	progress.style.display = '';
+}
+
+function stopProgress() {
+	progress.style.display = 'none';
+}
+
+function showOpac() {
+	getShowView();
 	opac.style.display = '';
 
 	return false;
 }
 
 function hideOpac() {
-	var opac = document.getElementById('opac');
-
 	opac.style.display = 'none';
 
 	return false;
@@ -508,7 +538,6 @@ function showShowView(event) {
 	var divId = event.currentTarget.id;
 	var app = getApp(divId);
 	var logsMsg = getLogsMsg(divId);
-	var showView = getShowView();
 	var header = document.getElementById('headerView');
 	var msgView;
 
@@ -523,6 +552,7 @@ function showShowView(event) {
 		msgView.innerHTML += '<p>' + logsMsg.logs[index].msg + '</p>\n';
 	}
 	hideTooltip();
+	progress.style.display = 'none';
 	showView.style.display = '';
 
 	return false;
