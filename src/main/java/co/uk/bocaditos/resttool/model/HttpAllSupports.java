@@ -47,7 +47,7 @@ public class HttpAllSupports {
 	/**
 	 * JSON representation of the instance of this class.
 	 */
-	private final String json; // JSON form of the full object 
+	private final String json; // JSON form of the full object
 
 
 	public HttpAllSupports(final String name, final ObjectMapper mapper) throws IOException, 

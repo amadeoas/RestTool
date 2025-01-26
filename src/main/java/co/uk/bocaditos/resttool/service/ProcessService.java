@@ -1,4 +1,4 @@
-package co.uk.bocaditos.resttool.config.service;
+package co.uk.bocaditos.resttool.service;
 
 import java.util.Map;
 

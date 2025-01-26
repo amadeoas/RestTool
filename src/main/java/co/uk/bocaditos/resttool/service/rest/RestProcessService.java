@@ -1,4 +1,4 @@
-package co.uk.bocaditos.resttool.config.service.rest;
+package co.uk.bocaditos.resttool.service.rest;
 
 import java.util.Map;
 
@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import co.uk.bocaditos.resttool.config.service.ProcessService;
 import co.uk.bocaditos.resttool.controller.RestToolError;
+import co.uk.bocaditos.resttool.service.ProcessService;
 
 
 /**
