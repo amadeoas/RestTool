@@ -1,0 +1,101 @@
+{
+	from: "2024-12-01 12:34:11.000",
+	to: "2024-12-01 12:34:13.570",
+	apps: [{
+		name: "app-I", 
+		from: "2024-12-01 12:34:11.000",
+		to: "2024-12-01 12:34:13.570",
+		index: 0,
+		logs: [{
+			type: "MSG",
+			from: "2024-12-01 12:34:11.000",
+			to: "2024-12-01 12:34:11.510",
+			index: 0,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:11.000] [app-I] [co.uk.bocaditos.api.app1.Test] - Initialising..."
+			}, {
+				fields: [],
+				msg: "[2024-12-01 12:34:11.008] [app-I] [co.uk.bocaditos.api.app1.Test] - Setting values..."
+			}, {
+				fields: [],
+				msg: "[2024-12-01 12:34:11.009] [app-I] [co.uk.bocaditos.api.app1.Test] - Values were set"
+			}, {
+				fields: [],
+				msg: "[2024-12-01 12:34:11.510] [app-I] [co.uk.bocaditos.api.app1.Test] - Initialised"
+			}]
+		}, {
+			type: "REQUEST RECEIVED",
+			from: "2024-12-01 12:34:12.000",
+			to: "2024-12-01 12:34:12.000",
+			index: 1,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:12.000] [app-I] [co.uk.bocaditos.api.app1.Test] - ::REQUEST RECEIVED:: Requesting something to APP I...::END RECEIVED::"
+			}]
+		}, {
+			type: "SEND REQUEST",
+			from: "2024-12-01 12:34:12.100",
+			to: "2024-12-01 12:34:12.100",
+			index: 2,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:12.100] [app-I] [co.uk.bocaditos.api.app1.Test] - ::SEND REQUEST:: Requesting something to APP I...::END RECEIVED::"
+			}]
+		}, {
+			type: "SEND RESPONSE",
+			from: "2024-12-01 12:34:12.978",
+			to: "2024-12-01 12:34:12.978",
+			index: 3,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:12.992] [app-I] [co.uk.bocaditos.api.app1.Test] - ::SEND RESPONSE:: Requesting something to APP I...::END RESPONSE::"
+			}]
+		}, {
+			type: "REQUEST RESPONSE",
+			from: "2024-12-01 12:34:13.020",
+			to: "2024-12-01 12:34:13.020",
+			index: 4,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:13.020] [app-I] [co.uk.bocaditos.api.app1.Test] - ::REQUEST RESPONSE:: Requesting something to APP I...::END RESPONSE::"
+			}]
+		}, {
+			type: "MSG",
+			from: "2024-12-01 12:34:13.202",
+			to: "2024-12-01 12:34:13.570",
+			index: 5,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:13.202] [app-I] [co.uk.bocaditos.api.app1.Test] - Waiting for response..."
+			}, {
+				fields: [],
+				msg: "[2024-12-01 12:34:13.570] [app-I] [co.uk.bocaditos.api.app1.Test] - Received response"
+			}]
+		}]
+	}, {
+		name: "app-II", 
+		from: "2024-12-01 12:34:12.108",
+		to: "2024-12-01 12:34:12.972",
+		index: 1,
+		logs: [{
+			type: "REQUEST RECEIVED",
+			from: "2024-12-01 12:34:12.108",
+			to: "2024-12-01 12:34:12.108",
+			index: 0,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:12.106] [app-II] [co.uk.bocaditos.api.app1.Test] - ::REQUEST RECEIVED:: Requesting something to APP I...::END RECEIVED::"
+			}]
+		}, {
+			type: "REQUEST RESPONSE",
+			from: "2024-12-01 12:34:12.972",
+			to: "2024-12-01 12:34:12.972",
+			index: 1,
+			logs: [{
+				fields: [],
+				msg: "[2024-12-01 12:34:12.972] [app-II] [co.uk.bocaditos.api.app1.Test] - ::REQUEST RECEIVED:: Requesting something to APP I...::END RECEIVED::"
+			}]
+		}]
+	}]
+}
